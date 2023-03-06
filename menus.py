@@ -3,7 +3,7 @@ import tkinter as tk
 class Menu(tk.Tk):
     FONT = "Arial {size} bold"
 
-    def __init__(self, title="", size: tuple = (256, 256)):
+    def __init__(self, title="", size: tuple = (256, 256), center=False):
         super().__init__()
 
         self.wm_title(title)
@@ -14,11 +14,15 @@ class Menu(tk.Tk):
         w_width = self.winfo_screenwidth()
         w_height = self.winfo_screenheight()
 
-        self.geometry(f"{width}x{height}+{int((w_width - width)/2)}+{int((w_height - height)/2)}")
-        self.option_add("*font", Menu.FONT.format(size=24))
+        pos = ""
+        if center:
+            pos = f"+{int((w_width - width)/2)}+{int((w_height - height)/2)}"
+        self.geometry(f"{width}x{height}" + pos)
+
+        self.option_add("*font", Menu.FONT.format(size=16))
     
     @staticmethod
-    def create_button(clazz, x, y, text="", callback=None, width=128, height=128):
+    def create_button(clazz, row, column, text="", callback=None, width=128, height=128):
         frame = tk.Frame(clazz, width=width, height=height)
         btn = tk.Button(frame, text=text, command=callback)
 
@@ -26,7 +30,7 @@ class Menu(tk.Tk):
         frame.columnconfigure(0, weight=1)
         frame.rowconfigure(0, weight=1)
 
-        frame.grid(row=x, column=y)
+        frame.grid(row=row, column=column)
 
         btn.grid(sticky="wens")
 
