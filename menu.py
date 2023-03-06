@@ -8,6 +8,7 @@ class Menu(tk.Tk):
 
         self.wm_title("Minesweeper - Create")
 
+        # Unfortunately give the full width when there is multiple monitors
         w_width = self.winfo_screenwidth()
         w_height = self.winfo_screenheight()
 
@@ -25,6 +26,9 @@ class Menu(tk.Tk):
         Menu.create_button(button_frame, 1, 2, text="24x24", width=size[0]/2, height=size[1]/2)
         Menu.create_button(button_frame, 2, 1, text="12x12", width=size[0]/2, height=size[1]/2)
         Menu.create_button(button_frame, 2, 2, text="?x?", width=size[0]/2, height=size[1]/2)
+
+        credits_label = tk.Label(text="By: Linghun | Dams4K", font=Menu.FONT.format(size=8)) # Yes those are our nicknames
+        credits_label.pack(side=tk.BOTTOM)
 
     @staticmethod
     def create_button(clazz, x, y, text="", callback=None, width=128, height=128):
