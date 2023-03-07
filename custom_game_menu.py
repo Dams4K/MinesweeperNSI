@@ -3,7 +3,7 @@ from menus import Menu
 
 class CustomGameMenu(Menu):
     def __init__(self, callback: callable):
-        size = (400, 150)
+        size = (400, 170)
         super().__init__(title="Minesweeper - Custom Game", size=size)
 
         self.callback = callback
@@ -11,8 +11,8 @@ class CustomGameMenu(Menu):
         settings_frame = tk.Frame(self, width=size[0], height=size[1])
         settings_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
 
-        tk.Label(settings_frame, text="Rows:").grid(row=0, column=0)
-        tk.Label(settings_frame, text="Column:").grid(row=1, column=0)
+        tk.Label(settings_frame, text="Column:").grid(row=0, column=0)
+        tk.Label(settings_frame, text="Rows:").grid(row=1, column=0)
 
         self.width_entry = tk.Entry(settings_frame)
         self.width_entry.insert(0, "9")
