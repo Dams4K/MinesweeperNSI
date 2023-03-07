@@ -71,7 +71,6 @@ class Game(Menu):
             voisins = self.voisin(x,y)
             nb_mines = sum([self.minesweeper[x1][y1] for x1,y1 in voisins])
             if nb_mines !=0:
-                #self.minesgrid[(x,y)] = tk.Button(root, image = pixel, text = nb_mines, justify="center", compound="c")
                 if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
                     self.minesgrid[(x,y)].config(bg=Game.BROWN1, text = nb_mines)
                 else:
