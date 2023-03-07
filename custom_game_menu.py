@@ -18,8 +18,8 @@ class CustomGameMenu(Menu):
         self.height_entry.insert(0, "9")
         self.height_entry.grid(row=1, column=1)
 
-        Menu.create_button(self, 2, 0, text="Cancel", height = 32, callback=self.destroy)
-        Menu.create_button(self, 2, 1, text="Confirm", height = 32, callback=self.send_informations)
+        Menu.create_button(self, 2, 0, text="Cancel", height = 32, command=self.destroy)
+        Menu.create_button(self, 2, 1, text="Confirm", height = 32, command=self.send_informations)
 
     def send_informations(self):
         size = (

@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter.font import nametofont
 from random import randint
 from menus import Menu
 
