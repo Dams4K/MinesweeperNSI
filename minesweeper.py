@@ -10,26 +10,30 @@ class Game(Menu):
     BROWN1 = "NavajoWhite2"
     BROWN2 = "NavajoWhite3"
 
-    def __init__(self, size: tuple = (9, 9)):
+    def __init__(self, size: tuple = (9, 9), mines_percentage: float = 0.15):
         super().__init__(title="Minesweeper")
 
         self.btn_size = 64
         self.size = size
         self.geometry(f"{min(1280, self.btn_size*size[0])}x{min(720, self.btn_size*size[1])}")
-        n = 20
 
         self.drapeau = tk.PhotoImage(master=self, file ='Drapeau.png') # 'pyimage1'
         self.pixel = tk.PhotoImage(master=self, width=50, height=50)   # 'pyimage2'
 
         self.minesweeper = [[0 for i in range(size[0])] for j in range(size[1])]
 
-        for line in self.minesweeper:
-            for elt in range(len(line)):
-                if randint(0,100) <= n:
-                    line[elt] = 1
+        boxes_number = size[0] * size[1]
+        mines_to_place = min(int(boxes_number * mines_percentage), boxes_number-1)
 
-        for line in self.minesweeper:
-            print(line)
+        print(mines_to_place)
+        while mines_to_place > 0:
+            rand_x = randint(0, size[0]-1)
+            rand_y = randint(0, size[1]-1)
+            if self.minesweeper[rand_y][rand_x] != 1:
+                self.minesweeper[rand_y][rand_x] = 1
+                mines_to_place -= 1
+
+        print("\n".join(str(e) for e in self.minesweeper))
 
         self.minesgrid = {}
         for row in range(len(self.minesweeper)):
@@ -70,9 +74,9 @@ class Game(Menu):
             if nb_mines !=0:
                 #self.minesgrid[(x,y)] = tk.Button(root, image = pixel, text = nb_mines, justify="center", compound="c")
                 if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
-                    self.minesgrid[(x,y)].config(bg=Game.BROWN1, compound="c", text = nb_mines)
+                    self.minesgrid[(x,y)].config(bg=Game.BROWN1, text = nb_mines)
                 else:
-                    self.minesgrid[(x,y)].config(bg=Game.BROWN2, compound="c", text = nb_mines)
+                    self.minesgrid[(x,y)].config(bg=Game.BROWN2, text = nb_mines)
             else:
                 if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
                     self.minesgrid[(x,y)].config(bg=Game.BROWN1)
