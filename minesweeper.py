@@ -14,6 +14,10 @@ class Game(Menu):
 
         self.btn_size = 64
         self.size = size
+        
+        window_size = (min(1280, self.btn_size*size[0]), min(720, self.btn_size*size[1]))
+        game_frame = tk.Frame(self, width=window_size[0], height=window_size[1])
+        game_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
         self.geometry(f"{min(1280, self.btn_size*size[0])}x{min(720, self.btn_size*size[1])}")
 
         self.drapeau = tk.PhotoImage(master=self, file ='Drapeau.png') # 'pyimage1'
@@ -38,9 +42,9 @@ class Game(Menu):
         for row in range(len(self.minesweeper)):
             for column in range(len(self.minesweeper[row])):
                 if (row%2 == 0 and column%2 ==0) or (row%2 == 1 and column%2 == 1):
-                    self.minesgrid[(row, column)] = Menu.create_button(self, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, image=self.pixel, bg=Game.GREEN1, bd=0)
+                    self.minesgrid[(row, column)] = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, image=self.pixel, bg=Game.GREEN1, bd=0)
                 else:
-                    self.minesgrid[(row, column)] = Menu.create_button(self, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, image=self.pixel, bg=Game.GREEN2, bd=0)
+                    self.minesgrid[(row, column)] = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, image=self.pixel, bg=Game.GREEN2, bd=0)
 
 
         for button in self.minesgrid.values():
