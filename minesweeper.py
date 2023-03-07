@@ -48,18 +48,26 @@ class Game(Menu):
                 button.bind("<Button-1>", self.on_button_click)
                 button.bind("<Button-3>", self.flag)
     
-    def discover(self, event):
-        button = event.widget
+    def want_to_discover(self, event):
+        self.discover(event.widget)
+        
+    def discover(self, button):
         if button["image"] != 'pyimage1':
             for key, value in self.minesgrid.items():
                 if value == button:
                     x, y = key
+        
         voisins = self.voisin(x,y)
+
         nb_mines = sum([self.minesweeper[x1][y1] for x1,y1 in voisins])
         nb_drapeau = sum([1 for x1,y1 in voisins if self.minesgrid[(x1,y1)]["image"] == 'pyimage1'])
         if nb_mines == nb_drapeau:
             for x1,y1 in voisins:
-                self.afficher_nb_mines(x1, y1)
+                button_near = self.minesgrid[(x1, y1)]
+                if not button_near["bg"] in [Game.BROWN1, Game.BROWN2]:
+
+                    self.afficher_nb_mines(x1, y1)
+                    self.discover(button_near)
 
     def perdu(self):
         print("perdu")
@@ -80,7 +88,7 @@ class Game(Menu):
                     self.minesgrid[(x,y)].config(bg=Game.BROWN1)
                 else:
                     self.minesgrid[(x,y)].config(bg=Game.BROWN2)
-            self.minesgrid[(x,y)].bind("<Button-2>", self.discover)
+            self.minesgrid[(x,y)].bind("<Button-2>", self.want_to_discover)
 
     def on_button_click(self, event):
         button = event.widget
