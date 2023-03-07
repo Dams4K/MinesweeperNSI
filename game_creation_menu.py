@@ -1,6 +1,7 @@
 import tkinter as tk
 from menus import Menu
 from custom_game_menu import CustomGameMenu
+from minesweeper import Game
 
 class GameCreationMenu(Menu):
     def __init__(self):
@@ -34,7 +35,8 @@ class GameCreationMenu(Menu):
         credits_label.pack(side=tk.BOTTOM)
     
     def create_game(self, minesweeper_size: tuple):
-        print(minesweeper_size)
+        game = Game(minesweeper_size)
+        self.destroy()
 
 
 if __name__ == "__main__":
