@@ -13,9 +13,10 @@ class Game(Menu):
     def __init__(self, size: tuple = (9, 9)):
         super().__init__(title="Minesweeper")
 
+        self.btn_size = 64
         self.size = size
+        self.geometry(f"{min(1280, self.btn_size*size[0])}x{min(720, self.btn_size*size[1])}")
         n = 20
-
 
         self.drapeau = tk.PhotoImage(master=self, file ='Drapeau.png') # 'pyimage1'
         self.pixel = tk.PhotoImage(master=self, width=50, height=50)   # 'pyimage2'
@@ -30,15 +31,13 @@ class Game(Menu):
         for line in self.minesweeper:
             print(line)
 
-
         self.minesgrid = {}
-        for line in range(len(self.minesweeper)):
-            for column in range(len(self.minesweeper[line])):
-                if (line%2 == 0 and column%2 ==0) or (line%2 == 1 and column%2 == 1):
-                    self.minesgrid[(line, column)] = tk.Button(self, compound='c', image=self.pixel, bg=Game.GREEN1, bd=0)
+        for row in range(len(self.minesweeper)):
+            for column in range(len(self.minesweeper[row])):
+                if (row%2 == 0 and column%2 ==0) or (row%2 == 1 and column%2 == 1):
+                    self.minesgrid[(row, column)] = Menu.create_button(self, row, column, compound='c', width=self.btn_size, height=self.btn_size, image=self.pixel, bg=Game.GREEN1, bd=0)
                 else:
-                    self.minesgrid[(line, column)] = tk.Button(self, compound='c', image=self.pixel, bg=Game.GREEN2, bd=0)
-                self.minesgrid[(line, column)].grid(row = line, column = column)
+                    self.minesgrid[(row, column)] = Menu.create_button(self, row, column, compound='c', width=self.btn_size, height=self.btn_size, image=self.pixel, bg=Game.GREEN2, bd=0)
 
 
         for button in self.minesgrid.values():
@@ -58,8 +57,6 @@ class Game(Menu):
         if nb_mines == nb_drapeau:
             for x1,y1 in voisins:
                 afficher_nb_mines(x1, y1)
-
-            
 
     def perdu(self):
         print("perdu")

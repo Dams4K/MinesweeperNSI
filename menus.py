@@ -22,9 +22,9 @@ class Menu(tk.Tk):
         self.option_add("*font", Menu.FONT.format(size=16))
     
     @staticmethod
-    def create_button(clazz, row, column, text="", callback=None, width=128, height=128):
+    def create_button(clazz, row, column, width=128, height=128, **kwargs):
         frame = tk.Frame(clazz, width=width, height=height)
-        btn = tk.Button(frame, text=text, command=callback)
+        btn = tk.Button(frame, **kwargs)
 
         frame.grid_propagate(False)
         frame.columnconfigure(0, weight=1)
@@ -33,6 +33,7 @@ class Menu(tk.Tk):
         frame.grid(row=row, column=column)
 
         btn.grid(sticky="wens")
+        return btn
 
 
 
