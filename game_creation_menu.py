@@ -34,8 +34,8 @@ class GameCreationMenu(Menu):
         credits_label = tk.Label(self, text="By: Linghun | Dams4K", font=Menu.FONT.format(size=8)) # Yes those are our nicknames
         credits_label.pack(side=tk.BOTTOM)
     
-    def create_game(self, minesweeper_size: tuple):
-        game = Game(minesweeper_size)
+    def create_game(self, minesweeper_size: tuple, mines_percentage: float = 0.15):
+        game = Game(minesweeper_size, mines_percentage)
         self.destroy()
 
 
