@@ -54,6 +54,7 @@ class Game(Menu):
     def discover(self, button):
         if button["image"] == 'pyimage1':
             return
+        
         for key, value in self.minesgrid.items():
             if value == button:
                 x, y = key
@@ -98,11 +99,15 @@ class Game(Menu):
     def on_button_click(self, event):
         button = event.widget
         if button["image"] != 'pyimage1':
-            for key, value in self.minesgrid.items():
-                if value == button:
-                    x, y = key
-                    self.afficher_nb_mines(x, y)
-                    break
+            if button["bg"] in [Game.BROWN1, Game.BROWN2]:
+                self.discover(button)
+            else:
+                for key, value in self.minesgrid.items():
+                    if value == button:
+                        x, y = key
+
+                        self.afficher_nb_mines(x, y)
+                        break
 
     def voisin(self, x, y):
         liste = [-1,0,1]
