@@ -25,18 +25,12 @@ def voisin(x,y):
 
     return sum(voisins)
             
-def temp(event):
+def flag(event):
     button = event.widget
-    for key, value in minesgrid.items():
-        if value == button:
-            x, y = key
-    drapeau = tk.PhotoImage(file="Drapeau.png", master=root)
-    if minesgrid[(x,y)]["image"] == drapeau:
-        minesgrid[(x,y)]["image"] = pixel
+    if(button['image']=='pyimage1'):
+        button.config(image='pyimage2')   
     else:
-        minesgrid[(x,y)]["image"] = drapeau
-
-    print("drapeau")
+        button.config(image='pyimage1')
 
 
 root = tk.Tk()
@@ -45,6 +39,10 @@ w = 9
 h = 10
 
 n = 100
+debug = 1
+
+Drapeau = tk.PhotoImage(master=root, file ='Drapeau.png') # 'pyimage1'
+pixel = tk.PhotoImage(width=50, height=50, master=root)   # 'pyimage2'
 
 minesweep = [[0 for i in range(w)]for j in range(h)]
 
@@ -52,11 +50,11 @@ for line in minesweep:
     for elt in range(len(line)):
         if randint(0,100) <= n:
             line[elt] = 1
+def DEBUG():
+    if debug:
+        for line in minesweep:
+            print(line)
 
-for line in minesweep:
-    print(line)
-
-pixel = tk.PhotoImage(width=50, height=50, master=root)
 minesgrid = {}
 for line in range(len(minesweep)):
     for column in range(len(minesweep[line])):
@@ -66,7 +64,7 @@ for line in range(len(minesweep)):
 
 for button in minesgrid.values():
     button.bind("<Button-1>", on_button_click)
-    button.bind("<Button-3>", temp)
+    button.bind("<Button-3>", flag)
 
 
 root.mainloop()
