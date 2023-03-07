@@ -52,11 +52,11 @@ class Game(Menu):
                 if value == button:
                     x, y = key
         voisins = self.voisin(x,y)
-        nb_mines = sum([minesweep[x1][y1] for x1,y1 in voisins])
+        nb_mines = sum([self.minesweeper[x1][y1] for x1,y1 in voisins])
         nb_drapeau = sum([1 for x1,y1 in voisins if self.minesgrid[(x1,y1)]["image"] == 'pyimage1'])
         if nb_mines == nb_drapeau:
             for x1,y1 in voisins:
-                afficher_nb_mines(x1, y1)
+                self.afficher_nb_mines(x1, y1)
 
     def perdu(self):
         print("perdu")
