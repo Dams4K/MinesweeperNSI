@@ -70,7 +70,7 @@ class Game(Menu):
                 self.perdu()
             voisins = self.voisin(x,y)
             nb_mines = sum([self.minesweeper[x1][y1] for x1,y1 in voisins])
-            if nb_mines !=0:
+            if nb_mines != 0:
                 if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
                     self.minesgrid[(x,y)].config(bg=Game.BROWN1, text = nb_mines)
                 else:
@@ -80,7 +80,6 @@ class Game(Menu):
                     self.minesgrid[(x,y)].config(bg=Game.BROWN1)
                 else:
                     self.minesgrid[(x,y)].config(bg=Game.BROWN2)
-            self.minesgrid[(x,y)].grid(row = x, column = y)
             self.minesgrid[(x,y)].bind("<Button-2>", self.discover)
 
     def on_button_click(self, event):
