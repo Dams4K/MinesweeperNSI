@@ -1,7 +1,6 @@
 import tkinter as tk
 from random import randint
-from menus import Menu
-from lose_menu import Lose
+from .menus import Menu
 
 class Game(Menu):
     GREEN1 = "DarkOliveGreen2"
@@ -10,9 +9,9 @@ class Game(Menu):
     BROWN1 = "NavajoWhite2"
     BROWN2 = "NavajoWhite3"
 
-    def __init__(self, size: tuple = (9, 9), mines_percentage: float = 0.15):
+    def __init__(self, end_callback: callable, size: tuple = (9, 9), mines_percentage: float = 0.15):
         super().__init__(title="Minesweeper")
-
+        self.end_callback = end_callback
         self.btn_size = 64
         self.size = size
         
@@ -85,7 +84,7 @@ class Game(Menu):
                     self.bomb(x,y)
 
         
-        lose = Lose(0, 0, self.placed_mines)
+        self.end_callback(self, False, 0, 0, self.placed_mines)
         print("perdu")
 
     def afficher_nb_mines(self, x, y):
@@ -151,7 +150,34 @@ class Game(Menu):
         else:
             button.config(bg=Game.BROWN2, image='pyimage3')
          
-            
+
+class Lose(Menu):
+    def __init__(self, callback, game_menu: Game, time=0, remaining_mines = 0, mines_to_place = 0):
+        self.mines_to_place = mines_to_place
+        self.time = time
+        self.remaining_mines = remaining_mines
+
+        self.callback = callback
+        self.game_menu = game_menu
+
+        size=(512,512)
+
+        super().__init__( "Game Over", size)
+
+
+        lose_frame = tk.Frame(self, width=size[0], height=size[1])
+        lose_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        tk.Label(lose_frame, text="Oh no ! You have lose :(", font=Menu.FONT.format(size=32)).grid(row=0, column=0)
+        
+        lose_buttons = tk.Frame(self, width=size[0], height=size[1])
+        lose_buttons.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
+        Menu.create_button(lose_buttons, 0, 0, text="New Game", height = 32, command=self.new_game)
+        Menu.create_button(lose_buttons, 0, 1, text="Quit", height = 32, command=self.destroy)
+
+    def new_game(self):
+        self.callback()
+        self.destroy()
+        self.game_menu.destroy()
             
 if __name__ == "__main__":
     game = Game()
