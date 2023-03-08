@@ -1,6 +1,7 @@
 import tkinter as tk
 from random import randint
 from menus import Menu
+from lose_menu import Lose
 
 class Game(Menu):
     GREEN1 = "DarkOliveGreen2"
@@ -28,6 +29,7 @@ class Game(Menu):
 
         boxes_number = size[0] * size[1]
         mines_to_place = min(int(boxes_number * mines_percentage), boxes_number-1)
+        self.placed_mines = mines_to_place
 
         print(mines_to_place)
         while mines_to_place > 0:
@@ -76,11 +78,14 @@ class Game(Menu):
                     self.afficher_nb_mines(x1, y1)
                     self.discover(button_near)
 
-    def perdu(self,x,y):
+    def perdu(self, x, y):
         for x in range(len(self.minesweeper)):
             for y in range(len(self.minesweeper[x])):
                 if self.minesweeper[x][y] == 1:
                     self.bomb(x,y)
+
+        
+        lose = Lose(0, 0, self.placed_mines)
         print("perdu")
 
     def afficher_nb_mines(self, x, y):
