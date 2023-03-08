@@ -16,7 +16,6 @@ class Game(Menu):
         self.size = size
         
         self.DRAPEAU = tk.PhotoImage(master=self, file ='Drapeau.png')
-        print(self.DRAPEAU.__dict__)
         self.MINE_IMAGE = tk.PhotoImage(master=self, file ='assets/bomb.png')
 
         window_size = (min(1280, self.btn_size*size[0]), min(720, self.btn_size*size[1]))
@@ -69,12 +68,11 @@ class Game(Menu):
 
         nb_mines = sum([self.minesweeper[x1][y1] for x1,y1 in voisins])
         nb_drapeau = sum([1 for x1,y1 in voisins if self.minesgrid[(x1,y1)]["image"] == self.DRAPEAU.name])
-        print(nb_mines, nb_drapeau)
+        
         if nb_mines == nb_drapeau:
             for x1,y1 in voisins:
                 button_near = self.minesgrid[(x1, y1)]
                 if not button_near["bg"] in [Game.BROWN1, Game.BROWN2]:
-                    print(button_near["bg"])
                     self.open_case(x1, y1)
                     self.discover(button_near)
 
