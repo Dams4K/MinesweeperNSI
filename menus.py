@@ -10,7 +10,7 @@ class Menu(tk.Tk):
         width = size[0]
         height = size[1]
 
-         # Unfortunately give the full width when there is multiple monitors
+        # Unfortunately give the full width when there is multiple monitors
         w_width = self.winfo_screenwidth()
         w_height = self.winfo_screenheight()
 
