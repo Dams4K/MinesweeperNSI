@@ -22,6 +22,7 @@ class Game(Menu):
 
         self.drapeau = tk.PhotoImage(master=self, file ='Drapeau.png') # 'pyimage1'
         self.pixel = tk.PhotoImage(master=self, width=50, height=50)   # 'pyimage2'
+        self.bombimage = tk.PhotoImage(master=self, file ='assets/bomb.png') # 'pyimage3'
 
         self.minesweeper = [[0 for i in range(size[0])] for j in range(size[1])]
 
@@ -48,7 +49,7 @@ class Game(Menu):
 
 
         for button in self.minesgrid.values():
-            if button['text'] == "" or button["color"] in ["salmon2", "salmon3"]:
+            if button['text'] == "" or button["color"] in [Game.BROWN1, Game.BROWN2]:
                 button.bind("<Button-1>", self.on_button_click)
                 button.bind("<Button-3>", self.flag)
     
@@ -75,30 +76,31 @@ class Game(Menu):
                     self.afficher_nb_mines(x1, y1)
                     self.discover(button_near)
 
-    def perdu(self):
+    def perdu(self,x,y):
+        self.bomb(x,y)
         print("perdu")
 
     def afficher_nb_mines(self, x, y):
         if self.minesgrid[(x,y)]['image'] != 'pyimage1':
-            if self.minesweeper[x][y] == 1:
-                self.perdu()
-            voisins = self.voisin(x,y)
-            nb_mines = sum([self.minesweeper[x1][y1] for x1,y1 in voisins])
-
-            button = self.minesgrid[(x,y)]
-            if nb_mines != 0:
-                if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
-                    button.config(bg=Game.BROWN1, text = nb_mines)
-                else:
-                    button.config(bg=Game.BROWN2, text = nb_mines)
-            else:
-                if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
-                    button.config(bg=Game.BROWN1)
-                else:
-                    button.config(bg=Game.BROWN2)
+            if self.minesweeper[x][y] != 1:
                 
-                self.discover(button)
-            self.minesgrid[(x,y)].bind("<Button-2>", self.want_to_discover)
+                voisins = self.voisin(x,y)
+                nb_mines = sum([self.minesweeper[x1][y1] for x1,y1 in voisins])
+
+                button = self.minesgrid[(x,y)]
+                if nb_mines != 0:
+                    if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
+                        button.config(bg=Game.BROWN1, text = nb_mines)
+                    else:
+                        button.config(bg=Game.BROWN2, text = nb_mines)
+                else:
+                    if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
+                        button.config(bg=Game.BROWN1)
+                    else:
+                        button.config(bg=Game.BROWN2)
+                
+                    self.discover(button)
+                self.minesgrid[(x,y)].bind("<Button-2>", self.want_to_discover)
 
     def on_button_click(self, event):
         button = event.widget
@@ -109,9 +111,12 @@ class Game(Menu):
                 for key, value in self.minesgrid.items():
                     if value == button:
                         x, y = key
-
-                        self.afficher_nb_mines(x, y)
+                        if self.minesweeper[x][y] ==0:
+                            self.afficher_nb_mines(x, y)
+                        else:
+                            self.perdu(x,y)
                         break
+        
 
     def voisin(self, x, y):
         liste = [-1,0,1]
@@ -125,10 +130,20 @@ class Game(Menu):
                 
     def flag(self, event):
         button = event.widget
-        if(button['image']=='pyimage1'):
-            button.config(image='pyimage2')   
+        if button["bg"] in [Game.GREEN1, Game.GREEN2]:
+            if(button['image']=='pyimage1'):
+                button.config(image='pyimage2')   
+            else:
+                button.config(image='pyimage1')
+
+    def bomb(self,x,y):
+        button = self.minesgrid[(x,y)]
+        if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
+            button.config(bg=Game.BROWN1, image='pyimage3')
         else:
-            button.config(image='pyimage1')
+            button.config(bg=Game.BROWN2, image='pyimage3')
+         
+            
             
 if __name__ == "__main__":
     game = Game()
