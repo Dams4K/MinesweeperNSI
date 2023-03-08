@@ -16,7 +16,8 @@ class Game(Menu):
 
         self.size = size
         self.mines_percentage = mines_percentage
-        
+        self.generated = False
+
         self.DRAPEAU = tk.PhotoImage(master=self, file ='Drapeau.png')
         self.MINE_IMAGE = tk.PhotoImage(master=self, file ='assets/bomb.png')
 
@@ -42,6 +43,7 @@ class Game(Menu):
                 button.bind("<Button-3>", self.flag)
     
     def generate_mines(self, void_tiles: set):
+        self.generated = True
         boxes_number = self.size[0] * self.size[1]
         mines_to_place = min(int(boxes_number * self.mines_percentage), boxes_number-1)
         self.placed_mines = mines_to_place
@@ -123,7 +125,8 @@ class Game(Menu):
             if value == button:
                 x, y = key
 
-                self.generate_mines({(x, y)})
+                if not self.generated:
+                    self.generate_mines({(x, y)})
 
                 if button["image"] != self.DRAPEAU.name:
                     if button["bg"] in [Game.BROWN1, Game.BROWN2]:
