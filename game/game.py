@@ -15,14 +15,14 @@ class Game(Menu):
         self.btn_size = 64
         self.size = size
         
+        self.DRAPEAU = tk.PhotoImage(master=self, file ='Drapeau.png')
+        print(self.DRAPEAU.__dict__)
+        self.MINE_IMAGE = tk.PhotoImage(master=self, file ='assets/bomb.png')
+
         window_size = (min(1280, self.btn_size*size[0]), min(720, self.btn_size*size[1]))
         game_frame = tk.Frame(self, width=window_size[0], height=window_size[1])
         game_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
         self.geometry(f"{min(1280, self.btn_size*size[0])}x{min(720, self.btn_size*size[1])}")
-
-        self.drapeau = tk.PhotoImage(master=self, file ='Drapeau.png') # 'pyimage1'
-        self.pixel = tk.PhotoImage(master=self, width=50, height=50)   # 'pyimage2'
-        self.bombimage = tk.PhotoImage(master=self, file ='assets/bomb.png') # 'pyimage3'
 
         self.minesweeper = [[0 for i in range(size[0])] for j in range(size[1])]
 
@@ -44,9 +44,9 @@ class Game(Menu):
         for row in range(len(self.minesweeper)):
             for column in range(len(self.minesweeper[row])):
                 if (row%2 == 0 and column%2 ==0) or (row%2 == 1 and column%2 == 1):
-                    self.minesgrid[(row, column)] = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, image=self.pixel, bg=Game.GREEN1, bd=0)
+                    self.minesgrid[(row, column)] = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, bg=Game.GREEN1, bd=0)
                 else:
-                    self.minesgrid[(row, column)] = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, image=self.pixel, bg=Game.GREEN2, bd=0)
+                    self.minesgrid[(row, column)] = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, bg=Game.GREEN2, bd=0)
 
 
         for button in self.minesgrid.values():
@@ -58,7 +58,7 @@ class Game(Menu):
         self.discover(event.widget)
         
     def discover(self, button):
-        if button["image"] == 'pyimage1':
+        if button["image"] == self.DRAPEAU.name:
             return
         
         for key, value in self.minesgrid.items():
@@ -68,7 +68,7 @@ class Game(Menu):
         voisins = self.voisin(x, y)
 
         nb_mines = sum([self.minesweeper[x1][y1] for x1,y1 in voisins])
-        nb_drapeau = sum([1 for x1,y1 in voisins if self.minesgrid[(x1,y1)]["image"] == 'pyimage1'])
+        nb_drapeau = sum([1 for x1,y1 in voisins if self.minesgrid[(x1,y1)]["image"] == self.DRAPEAU.name])
         if nb_mines == nb_drapeau:
             for x1,y1 in voisins:
                 button_near = self.minesgrid[(x1, y1)]
@@ -88,7 +88,7 @@ class Game(Menu):
         print("perdu")
 
     def afficher_nb_mines(self, x, y):
-        if self.minesgrid[(x,y)]['image'] != 'pyimage1':
+        if self.minesgrid[(x,y)]['image'] != self.DRAPEAU.name:
             if self.minesweeper[x][y] != 1:
                 
                 voisins = self.voisin(x,y)
@@ -111,7 +111,7 @@ class Game(Menu):
 
     def on_button_click(self, event):
         button = event.widget
-        if button["image"] != 'pyimage1':
+        if button["image"] != self.DRAPEAU.name:
             if button["bg"] in [Game.BROWN1, Game.BROWN2]:
                 self.discover(button)
             else:
@@ -138,17 +138,17 @@ class Game(Menu):
     def flag(self, event):
         button = event.widget
         if button["bg"] in [Game.GREEN1, Game.GREEN2]:
-            if(button['image']=='pyimage1'):
-                button.config(image='pyimage2')   
+            if(button['image'] == self.DRAPEAU.name):
+                button.config(image='')   
             else:
-                button.config(image='pyimage1')
+                button.config(image=self.DRAPEAU.name)
 
     def bomb(self,x,y):
         button = self.minesgrid[(x,y)]
         if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
-            button.config(bg=Game.BROWN1, image='pyimage3')
+            button.config(bg=Game.BROWN1, image=self.MINE_IMAGE.name)
         else:
-            button.config(bg=Game.BROWN2, image='pyimage3')
+            button.config(bg=Game.BROWN2, image=self.MINE_IMAGE.name)
          
 
 class Lose(Menu):
