@@ -77,7 +77,10 @@ class Game(Menu):
                     self.discover(button_near)
 
     def perdu(self,x,y):
-        self.bomb(x,y)
+        for x in range(len(self.minesweeper)):
+            for y in range(len(self.minesweeper[x])):
+                if self.minesweeper[x][y] == 1:
+                    self.bomb(x,y)
         print("perdu")
 
     def afficher_nb_mines(self, x, y):
