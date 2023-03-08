@@ -54,6 +54,7 @@ class Game(Menu):
 
             voisins: set = set(self.voisin(rand_x, rand_y))
             voisins.add((rand_x, rand_y))
+            print(voisins, void_tiles, len(voisins.difference(void_tiles)), len(voisins))
 
             if self.minesweeper[rand_y][rand_x] != 1 and len(voisins.difference(void_tiles)) == len(voisins):
                 self.minesweeper[rand_y][rand_x] = 1
@@ -126,7 +127,7 @@ class Game(Menu):
                 x, y = key
 
                 if not self.generated:
-                    self.generate_mines({(x, y)})
+                    self.generate_mines({(y, x)})
 
                 if button["image"] != self.DRAPEAU.name:
                     if button["bg"] in [Game.BROWN1, Game.BROWN2]:
