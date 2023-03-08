@@ -13,7 +13,9 @@ class Game(Menu):
         super().__init__(title="Minesweeper")
         self.end_callback = end_callback
         self.btn_size = 64
+
         self.size = size
+        self.mines_percentage = mines_percentage
         
         self.DRAPEAU = tk.PhotoImage(master=self, file ='Drapeau.png')
         self.MINE_IMAGE = tk.PhotoImage(master=self, file ='assets/bomb.png')
@@ -24,20 +26,6 @@ class Game(Menu):
         self.geometry(f"{min(1280, self.btn_size*size[0])}x{min(720, self.btn_size*size[1])}")
 
         self.minesweeper = [[0 for i in range(size[0])] for j in range(size[1])]
-
-        boxes_number = size[0] * size[1]
-        mines_to_place = min(int(boxes_number * mines_percentage), boxes_number-1)
-        self.placed_mines = mines_to_place
-
-        print(mines_to_place)
-        while mines_to_place > 0:
-            rand_x = randint(0, size[0]-1)
-            rand_y = randint(0, size[1]-1)
-            if self.minesweeper[rand_y][rand_x] != 1:
-                self.minesweeper[rand_y][rand_x] = 1
-                mines_to_place -= 1
-
-        print("\n".join(str(e) for e in self.minesweeper))
 
         self.minesgrid = {}
         for row in range(len(self.minesweeper)):
@@ -53,6 +41,24 @@ class Game(Menu):
                 button.bind("<Button-1>", self.on_button_click)
                 button.bind("<Button-3>", self.flag)
     
+    def generate_mines(self, void_tiles: set):
+        boxes_number = self.size[0] * self.size[1]
+        mines_to_place = min(int(boxes_number * self.mines_percentage), boxes_number-1)
+        self.placed_mines = mines_to_place
+
+        while mines_to_place > 0:
+            rand_x = randint(0, self.size[0]-1)
+            rand_y = randint(0, self.size[1]-1)
+
+            voisins: set = set(self.voisin(rand_x, rand_y))
+            voisins.add((rand_x, rand_y))
+
+            if self.minesweeper[rand_y][rand_x] != 1 and len(voisins.difference(void_tiles)) == len(voisins):
+                self.minesweeper[rand_y][rand_x] = 1
+                mines_to_place -= 1
+
+        print("\n".join(str(e) for e in self.minesweeper))
+
     def want_to_discover(self, event):
         self.discover(event.widget)
         
@@ -112,13 +118,17 @@ class Game(Menu):
 
     def on_button_click(self, event):
         button = event.widget
-        if button["image"] != self.DRAPEAU.name:
-            if button["bg"] in [Game.BROWN1, Game.BROWN2]:
-                self.discover(button)
-            else:
-                for key, value in self.minesgrid.items():
-                    if value == button:
-                        x, y = key
+
+        for key, value in self.minesgrid.items():
+            if value == button:
+                x, y = key
+
+                self.generate_mines({(x, y)})
+
+                if button["image"] != self.DRAPEAU.name:
+                    if button["bg"] in [Game.BROWN1, Game.BROWN2]:
+                        self.discover(button)
+                    else:
                         self.open_case(x, y)
         
 
