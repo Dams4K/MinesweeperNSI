@@ -60,15 +60,15 @@ class Game(Menu):
             rand_y = randint(0, self.size[1]-1)
 
             voisins: set = set(self.voisin(rand_x, rand_y))
-            voisins.add((rand_x, rand_y))
+            voisins.add((rand_y, rand_x))
             print(voisins, void_tiles, len(voisins.difference(void_tiles)), len(voisins))
 
-            if self.minesweeper[rand_y][rand_x] != 1 and (len(voisins.difference(void_tiles)) == len(voisins) or counter < 1) and (rand_y,rand_x) not in void_tiles:
+            if self.minesweeper[rand_y][rand_x] != 1 and (len(voisins.difference(void_tiles)) == len(voisins) or counter < 1) and (rand_y, rand_x) not in void_tiles:
                 self.minesweeper[rand_y][rand_x] = 1
                 mines_to_place -= 1
 
         print("\n".join(str(e) for e in self.minesweeper))
-        self.safe_tiles = [(x,y) for x in range(self.size[0]) for y in range(self.size[1]) if self.minesweeper[y][x] != 1]
+        self.safe_tiles = [(y, x) for x in range(self.size[0]) for y in range(self.size[1]) if self.minesweeper[y][x] != 1]
 
     def want_to_discover(self, event):
         self.discover(event.widget)
@@ -79,37 +79,26 @@ class Game(Menu):
         
         for key, value in self.minesgrid.items():
             if value == button:
-                x, y = key
+                y, x = key
         
         voisins = self.voisin(x, y)
 
-        nb_mines = sum([self.minesweeper[y1][x1] for x1,y1 in voisins])
-        nb_drapeau = sum([1 for x1,y1 in voisins if self.minesgrid[(x1,y1)]["image"] == self.DRAPEAU.name])
+        nb_mines = sum([self.minesweeper[y1][x1] for y1, x1 in voisins])
+        nb_drapeau = sum([1 for y1, x1 in voisins if self.minesgrid[(y1, x1)]["image"] == self.DRAPEAU.name])
         
         if nb_mines == nb_drapeau:
-            for x1,y1 in voisins:
-                button_near = self.minesgrid[(x1, y1)]
-                if not button_near["bg"] in [Game.BROWN1, Game.BROWN2]:
+            for y1, x1 in voisins:
+                button_near = self.minesgrid[(y1, x1)]
+                if not self.is_brown(button_near):
                     self.open_case(x1, y1)
 
-    def perdu(self, x, y):
-        if self.minesweeper[y][x] == 1:
-            self.bomb(x,y)
-
-        
-        self.end_callback(self, False, 0, self.found_mines, self.placed_mines)
-        print("perdu")
-
-    def gagne(self):
-        self.end_callback(self, True, 0, 0, self.placed_mines)
-
     def open_case(self, x, y):
-        if self.minesgrid[(y,x)]['image'] != self.DRAPEAU.name:
+        if self.minesgrid[(y, x)]['image'] != self.DRAPEAU.name:
             if self.minesweeper[y][x] != 1:
-                voisins = self.voisin(x,y)
-                nb_mines = sum([self.minesweeper[y1][x1] for x1,y1 in voisins])
+                voisins = self.voisin(x, y)
+                nb_mines = sum([self.minesweeper[y1][x1] for y1, x1 in voisins])
 
-                button = self.minesgrid[(y,x)]
+                button = self.minesgrid[(y, x)]
                 
                 if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
                     button.config(bg=Game.BROWN1)
@@ -121,8 +110,8 @@ class Game(Menu):
                 else:
                     button.config(text=nb_mines)
                 
-                self.minesgrid[(y,x)].bind("<Button-2>", self.want_to_discover)
-                self.discovered_tiles.add((y,x))
+                self.minesgrid[(y, x)].bind("<Button-2>", self.want_to_discover)
+                self.discovered_tiles.add((y, x))
 
                 print(len(self.safe_tiles), len(self.discovered_tiles))
                 if len(self.safe_tiles) == len(self.discovered_tiles):
@@ -130,13 +119,25 @@ class Game(Menu):
             else:
                 self.perdu(x, y)
 
+    def perdu(self, x, y):
+        # show mines
+        for y in range(len(self.minesweeper)):
+            for x in range(len(self.minesweeper[y])):
+                if self.minesweeper[y][x] == 1:
+                    self.bomb(y, x)
+
+        self.end_callback(self, False, 0, self.found_mines, self.placed_mines)
+        print("perdu")
+
+    def gagne(self):
+        self.end_callback(self, True, 0, 0, self.placed_mines)
 
     def on_button_click(self, event):
         button = event.widget
 
         for key, value in self.minesgrid.items():
             if value == button:
-                x, y = key
+                y, x = key
 
                 if not self.generated:
                     self.generate_mines({(y, x)})
@@ -192,10 +193,11 @@ class Game(Menu):
     def voisin(self, x, y):
         liste = [-1,0,1]
         voisins = []
-        for i in liste:
-            for j in liste:
-                if 0<= x+i <= self.size[0]-1 and 0<= y+j <= self.size[1]-1:
-                    voisins.append((x+i, y+j))
+
+        for j in liste:
+            for i in liste:
+                if 0 <= x+i < self.size[0] and 0 <= y+j < self.size[1]:
+                    voisins.append((y+j, x+i))
 
         return voisins
                 
@@ -203,7 +205,7 @@ class Game(Menu):
         button = event.widget
         for key, value in self.minesgrid.items():
             if value == button:
-                x, y = key
+                y, x = key
         if button["bg"] in [Game.GREEN1, Game.GREEN2]:
             if(button['image'] == self.DRAPEAU.name):
                 button.config(image='')
@@ -217,8 +219,8 @@ class Game(Menu):
                     print("mines :", self.found_mines)
         
 
-    def bomb(self,x,y):
-        button = self.minesgrid[(x,y)]
+    def bomb(self, x, y):
+        button = self.minesgrid[(y, x)]
         if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
             button.config(bg=Game.BROWN1, image=self.MINE_IMAGE.name)
         else:
