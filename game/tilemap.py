@@ -12,54 +12,57 @@ class TileMap:
         w, h = ts, ts
 
         if l == r == t == b == tl == tr == bl == br == False:
-            x = y = ts * 3
+            x = y = 3
         elif l == r == t == b == tl == tr == bl == br == True:
-            x = y = ts
+            x = y = 1
         
         elif l == r == b == bl == br == True and t == tl == tr == False:
-            x = ts
-            y = ts * 2
+            x = 1
+            y = 2
         elif l == r == t == tl == tr == True and b == bl == br == False:
-            x = ts
+            x = 1
             y = 0
         elif r == t == b == tr == br == True and l == tl == bl == False:
             x = 0
-            y = ts
+            y = 1
         elif l == t == b == tl == bl == True and r == tr == br == False:
-            x = ts * 2
-            y = ts
+            x = 2
+            y = 1
         
         elif r == b == br == True and l == t == tl == tr == bl == False:
             x = y = 0
         elif l == b == bl == True and r == t == tl == tr == br == False:
-            x = ts * 2
+            x = 2
             y = 0
         elif r == t == tr == True and l == b == tl == bl == br == False:
             x = 0
-            y = ts * 2
+            y = 2
         elif l == t == tl == True and r == b == tr == br == bl == False:
-            x = ts * 2
-            y = ts * 2
+            x = 2
+            y = 2
         
         elif r == True and l == t == b == tl == tr == bl == br == False:
             x = 0
-            y = ts * 3
+            y = 3
         elif l == r == True and t == b == tl == tr == bl == br == False:
-            x = ts
-            y = ts * 3
+            x = 1
+            y = 3
         elif l == True and r == t == b == tl == tr == bl == br == False:
-            x = ts * 2
-            y = ts * 3
+            x = 2
+            y = 3
         
         elif b == True and l == r == t == tl == tr == bl == br == False:
-            x = ts * 3
+            x = 3
             y = 0
         elif t == b == True and l == r == tl == tr == bl == br == False:
-            x = ts * 3
-            y = ts
+            x = 3
+            y = 1
         elif t == True and l == r == b == tl == tr == bl == br == False:
-            x = ts * 3
-            y = ts * 2
+            x = 3
+            y = 2
+
+        x *= ts
+        y *= ts
 
         return ImageTk.PhotoImage(self.tileset.crop((x, y, x+w, y+h)))
 
