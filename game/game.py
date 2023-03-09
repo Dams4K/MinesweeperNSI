@@ -1,6 +1,7 @@
 import tkinter as tk
 from random import randint
 from .menus import Menu
+from .tilemap import TileMap
 
 class Game(Menu):
     GREEN1 = "DarkOliveGreen2"
@@ -20,6 +21,7 @@ class Game(Menu):
 
         self.DRAPEAU = tk.PhotoImage(master=self, file ='Drapeau.png')
         self.MINE_IMAGE = tk.PhotoImage(master=self, file ='assets/bomb.png')
+        self.tilemap = TileMap("assets/tilemap.png")
 
         window_size = (min(1280, self.btn_size*size[0]), min(720, self.btn_size*size[1]))
         game_frame = tk.Frame(self, width=window_size[0], height=window_size[1])
@@ -111,18 +113,17 @@ class Game(Menu):
                 nb_mines = sum([self.minesweeper[x1][y1] for x1,y1 in voisins])
 
                 button = self.minesgrid[(x,y)]
-                if nb_mines != 0:
-                    if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
-                        button.config(bg=Game.BROWN1, text = nb_mines)
-                    else:
-                        button.config(bg=Game.BROWN2, text = nb_mines)
-                else:
-                    if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
-                        button.config(bg=Game.BROWN1)
-                    else:
-                        button.config(bg=Game.BROWN2)
                 
+                if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
+                    button.config(bg=Game.BROWN1)
+                else:
+                    button.config(bg=Game.BROWN2)
+
+                if nb_mines == 0:
                     self.discover(button)
+                else:
+                    button.config(text=nb_mines)
+                
                 self.minesgrid[(x,y)].bind("<Button-2>", self.want_to_discover)
                 self.discovered_tiles.add((x,y))
                 print(len(self.safe_tiles), len(self.discovered_tiles))
