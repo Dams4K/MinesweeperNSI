@@ -27,6 +27,8 @@ class Game(Menu):
         self.geometry(f"{min(1280, self.btn_size*size[0])}x{min(720, self.btn_size*size[1])}")
 
         self.minesweeper = [[0 for i in range(size[0])] for j in range(size[1])]
+        self.discovered_tiles = set()
+        self.found_mines = 0
 
         self.minesgrid = {}
         for row in range(len(self.minesweeper)):
@@ -48,7 +50,10 @@ class Game(Menu):
         mines_to_place = min(int(boxes_number * self.mines_percentage), boxes_number-1)
         self.placed_mines = mines_to_place
 
+        counter = mines_to_place*3
+
         while mines_to_place > 0:
+            counter -= 1
             rand_x = randint(0, self.size[0]-1)
             rand_y = randint(0, self.size[1]-1)
 
@@ -56,11 +61,12 @@ class Game(Menu):
             voisins.add((rand_x, rand_y))
             print(voisins, void_tiles, len(voisins.difference(void_tiles)), len(voisins))
 
-            if self.minesweeper[rand_y][rand_x] != 1 and len(voisins.difference(void_tiles)) == len(voisins):
+            if self.minesweeper[rand_y][rand_x] != 1 and (len(voisins.difference(void_tiles)) == len(voisins) or counter < 1) and (rand_x,rand_y) not in void_tiles:
                 self.minesweeper[rand_y][rand_x] = 1
                 mines_to_place -= 1
 
         print("\n".join(str(e) for e in self.minesweeper))
+        self.safe_tiles = [(x,y) for x in range(self.size[0]) for y in range(self.size[1]) if self.minesweeper[y][x] != 1]
 
     def want_to_discover(self, event):
         self.discover(event.widget)
@@ -92,8 +98,11 @@ class Game(Menu):
                     self.bomb(x,y)
 
         
-        self.end_callback(self, False, 0, 0, self.placed_mines)
+        self.end_callback(self, False, 0, self.found_mines, self.placed_mines)
         print("perdu")
+
+    def gagne(self):
+        self.end_callback(self, True, 0, 0, self.placed_mines)
 
     def open_case(self, x, y):
         if self.minesgrid[(x,y)]['image'] != self.DRAPEAU.name:
@@ -115,6 +124,10 @@ class Game(Menu):
                 
                     self.discover(button)
                 self.minesgrid[(x,y)].bind("<Button-2>", self.want_to_discover)
+                self.discovered_tiles.add((x,y))
+                print(len(self.safe_tiles), len(self.discovered_tiles))
+                if len(self.safe_tiles) == len(self.discovered_tiles):
+                    self.gagne()
             else:
                 self.perdu(x, y)
 
@@ -148,11 +161,21 @@ class Game(Menu):
                 
     def flag(self, event):
         button = event.widget
+        for key, value in self.minesgrid.items():
+            if value == button:
+                x, y = key
         if button["bg"] in [Game.GREEN1, Game.GREEN2]:
             if(button['image'] == self.DRAPEAU.name):
-                button.config(image='')   
+                button.config(image='')
+                if self.minesweeper[x][y] == 1:
+                    self.found_mines -=1
+                    print("mines :", self.found_mines)
             else:
                 button.config(image=self.DRAPEAU.name)
+                if self.minesweeper[x][y] == 1:
+                    self.found_mines +=1
+                    print("mines :", self.found_mines)
+        
 
     def bomb(self,x,y):
         button = self.minesgrid[(x,y)]
@@ -163,10 +186,10 @@ class Game(Menu):
          
 
 class Lose(Menu):
-    def __init__(self, callback, game_menu: Game, time=0, remaining_mines = 0, mines_to_place = 0):
+    def __init__(self, callback, game_menu: Game, time=0, found_mines = 0, mines_to_place = 0):
         self.mines_to_place = mines_to_place
         self.time = time
-        self.remaining_mines = remaining_mines
+        self.found_mines = found_mines
 
         self.callback = callback
         self.game_menu = game_menu
@@ -178,15 +201,53 @@ class Lose(Menu):
 
         lose_frame = tk.Frame(self, width=size[0], height=size[1])
         lose_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
-        tk.Label(lose_frame, text="Oh no ! You have lose :(", font=Menu.FONT.format(size=32)).grid(row=0, column=0)
+        tk.Label(lose_frame, text="Oh no ! You have lost :(", font=Menu.FONT.format(size=32)).grid(row=0, column=0)
         
-        lose_buttons = tk.Frame(self, width=size[0], height=size[1])
-        lose_buttons.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
-        Menu.create_button(lose_buttons, 0, 0, text="New Game", height = 32, command=self.new_game)
-        Menu.create_button(lose_buttons, 0, 1, text="Quit", height = 32, command=self.destroy)
+        lose_buttons = tk.Frame(lose_frame, width=size[0], height=size[1]/2)
+        lose_buttons.grid(row = 1, column = 0)
+        Menu.create_button(lose_buttons, 0, 0, text="New Game", height = 32, command=lambda: self.new_game(True))
+        Menu.create_button(lose_buttons, 0, 1, text="Quit", height = 32, command=lambda: self.new_game(False))
 
-    def new_game(self):
-        self.callback()
+        lose_stats = tk.Frame(lose_frame, width=size[0], height=size[1]/2)
+        lose_stats.grid(row = 2, column = 0)
+        tk.Label(lose_stats, text=f"{found_mines}/{mines_to_place} discovered mines.").grid(row=0,column=0)
+
+
+    def new_game(self, replay: bool):
+        if replay:
+            self.callback()
+        self.destroy()
+        self.game_menu.destroy()
+            
+if __name__ == "__main__":
+    game = Game()
+    game.mainloop()
+
+class Win(Menu):
+    def __init__(self, callback, game_menu: Game, time=0, mines_to_place = 0):
+        self.mines_to_place = mines_to_place
+        self.time = time
+
+        self.callback = callback
+        self.game_menu = game_menu
+
+        size=(512,512)
+
+        super().__init__( "Game Over", size)
+
+
+        win_frame = tk.Frame(self, width=size[0], height=size[1])
+        win_frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+        tk.Label(win_frame, text="Yeaah ! You have won :)", font=Menu.FONT.format(size=32)).grid(row=0, column=0)
+        
+        win_buttons = tk.Frame(self, width=size[0], height=size[1])
+        win_buttons.place(relx=0.5, rely=0.6, anchor=tk.CENTER)
+        Menu.create_button(win_buttons, 0, 0, text="New Game", height = 32, command=lambda: self.new_game(True))
+        Menu.create_button(win_buttons, 0, 1, text="Quit", height = 32, command=lambda: self.new_game(False))
+
+    def new_game(self, replay: bool):
+        if replay:
+            self.callback()
         self.destroy()
         self.game_menu.destroy()
             
