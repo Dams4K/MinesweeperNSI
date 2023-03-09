@@ -38,9 +38,9 @@ class Game(Menu):
         for row in range(len(self.minesweeper)):
             for column in range(len(self.minesweeper[row])):
                 if (row%2 == 0 and column%2 ==0) or (row%2 == 1 and column%2 == 1):
-                    self.minesgrid[(column, row)] = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, bg=Game.GREEN1, bd=0)
+                    self.minesgrid[(column, row)] = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, bg=Game.GREEN1)
                 else:
-                    self.minesgrid[(column, row)] = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, bg=Game.GREEN2, bd=0)
+                    self.minesgrid[(column, row)] = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, bg=Game.GREEN2)
 
 
         for button in self.minesgrid.values():

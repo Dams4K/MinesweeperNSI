@@ -23,14 +23,14 @@ class Menu(tk.Tk):
     
     @staticmethod
     def create_button(clazz, row, column, width=128, height=128, **kwargs):
-        frame = tk.Frame(clazz, width=width, height=height)
-        btn = tk.Button(frame, **kwargs)
+        frame = tk.Frame(clazz, width=width, height=height, highlightthickness=-10)
+        btn = tk.Button(frame, bd=-2, highlightthickness=0, **kwargs)
 
         frame.grid_propagate(False)
         frame.columnconfigure(0, weight=1)
         frame.rowconfigure(0, weight=1)
 
-        frame.grid(row=row, column=column)
+        frame.grid(row=row, column=column, padx=(0, 0), pady=(0, 0))
 
         btn.grid(sticky="wens")
         return btn

@@ -6,7 +6,7 @@ class TileMap:
         self.tileset: Image = Image.open(tileset_path)
 
     def get_image(self, l=False, r=False, t=False, b=False, tl=False, tr=False, bl=False, br=False):
-        ts = self.tileset.size[1]/4
+        ts = self.tileset.size[1]/5
 
         x, y = 0, 0
         w, h = ts, ts
@@ -59,6 +59,63 @@ class TileMap:
             y = 1
         elif t == True and l == r == b == tl == tr == bl == br == False:
             x = 3
+            y = 2
+
+        elif r == b == True and l == t == tl == tr == bl == br == False:
+            x = 4
+            y = 0
+        elif l == b == True and r == t == tl == tr == bl == br == False:
+            x = 7
+            y = 0
+        elif r == t == True and l == b == tl == tr == bl == br == False:
+            x = 4
+            y = 3
+        elif l == t == True and r == b == tl == tr == bl == br == False:
+            x = 7
+            y = 3
+        
+
+        elif l == r == b == bl == True and t == tl == tr == br == False:
+            x = 5
+            y = 0
+        elif l == r == b == br == True and t == tl == tr == bl == False:
+            x = 6
+            y = 0
+        
+        elif r == t == b == tr == True and l == tl == bl == br == False:
+            x = 4
+            y = 1
+        elif r == t == b == tl == True and l == tr == bl == br == False:
+            x = 4
+            y = 2
+        
+        elif l == t == b == tl == True and r == tr == bl == br == False:
+            x = 7
+            y = 1
+        elif l == t == b == tr == True and r == tl == bl == br == False:
+            x = 7
+            y = 2
+        
+        elif l == r == t == tl == True and b == tr == bl == br == False:
+            x = 5
+            y = 3
+        elif l == r == t == tr == True and b == tl == bl == br == False:
+            x = 6
+            y = 3
+        
+
+        elif l == r == t == b == tl == tr == bl == True and br == False:
+            x = 5
+            y = 1
+        elif l == r == t == b == tl == tr == br == True and bl == False:
+            x = 6
+            y = 1
+        
+        elif l == r == t == b == tl == bl == br == True and tr == False:
+            x = 5
+            y = 2
+        elif l == r == t == b == tr == bl == br == True and tl == False:
+            x = 6
             y = 2
 
         x *= ts
