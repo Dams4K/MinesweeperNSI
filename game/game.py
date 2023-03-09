@@ -2,6 +2,7 @@ import tkinter as tk
 from random import randint
 from .menus import Menu
 from .tilemap import TileMap
+import time
 
 class Game(Menu):
     GREEN1 = "DarkOliveGreen2"
@@ -22,6 +23,7 @@ class Game(Menu):
         self.DRAPEAU = tk.PhotoImage(master=self, file ='Drapeau.png')
         self.MINE_IMAGE = tk.PhotoImage(master=self, file ='assets/bomb.png')
         self.tilemap = TileMap("assets/tilemap.png")
+        self.tilemap_imgs = {}
 
         window_size = (min(1280, self.btn_size*size[0]), min(720, self.btn_size*size[1]))
         game_frame = tk.Frame(self, width=window_size[0], height=window_size[1])
@@ -70,9 +72,21 @@ class Game(Menu):
         print("\n".join(str(e) for e in self.minesweeper))
         self.safe_tiles = [(y, x) for x in range(self.size[0]) for y in range(self.size[1]) if self.minesweeper[y][x] != 1]
 
+    def update_tilemap(self):
+        for pos, button in self.minesgrid.items():
+            y, x = pos
+            if self.is_brown(button):
+                vb = self.voisin_brown(x, y)
+                img_path = self.tilemap.get_image(**vb)
+                self.tilemap_imgs.setdefault(img_path, tk.PhotoImage(master=self, file=img_path))
+
+                button.config(image=self.tilemap_imgs[img_path])
+
+
     def want_to_discover(self, event):
         self.discover(event.widget)
-        
+        self.update_tilemap()
+    
     def discover(self, button):
         if button["image"] == self.DRAPEAU.name:
             return
@@ -93,12 +107,11 @@ class Game(Menu):
                     self.open_case(x1, y1)
 
     def open_case(self, x, y):
-        if self.minesgrid[(y, x)]['image'] != self.DRAPEAU.name:
+        button = self.minesgrid[(y, x)]
+        if button['image'] != self.DRAPEAU.name:
             if self.minesweeper[y][x] != 1:
                 voisins = self.voisin(x, y)
                 nb_mines = sum([self.minesweeper[y1][x1] for y1, x1 in voisins])
-
-                button = self.minesgrid[(y, x)]
                 
                 if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
                     button.config(bg=Game.BROWN1)
@@ -109,11 +122,12 @@ class Game(Menu):
                     self.discover(button)
                 else:
                     button.config(text=nb_mines)
-                
-                self.minesgrid[(y, x)].bind("<Button-2>", self.want_to_discover)
+
+                button.unbind("<Button-1>")
+                button.bind("<Button-1>", self.want_to_discover)
                 self.discovered_tiles.add((y, x))
 
-                print(len(self.safe_tiles), len(self.discovered_tiles))
+                # print(len(self.safe_tiles), len(self.discovered_tiles))
                 if len(self.safe_tiles) == len(self.discovered_tiles):
                     self.gagne()
             else:
@@ -143,10 +157,9 @@ class Game(Menu):
                     self.generate_mines({(y, x)})
 
                 if button["image"] != self.DRAPEAU.name:
-                    if button["bg"] in [Game.BROWN1, Game.BROWN2]:
-                        self.discover(button)
-                    else:
-                        self.open_case(x, y)
+                    self.open_case(x, y)
+        
+        self.update_tilemap()
     
     def is_brown(self, button):
         return button["bg"] in [Game.BROWN1, Game.BROWN2]
@@ -163,30 +176,31 @@ class Game(Menu):
             "br": False
         }
 
-        for j in [-1, 0, 1]:
-            for i in [-1, 0, 1]:
-                if 0 <= x+i < self.size[0] and 0 <= y+j < self.size[1]:
-                    brown = self.is_brown(self.minesgrid[(y+j, x+i)])
-                    if not brown:
-                        continue
+        for y0, x0 in self.voisin(x, y):
+            brown = self.is_brown(self.minesgrid[(y0, x0)])
+            if not brown:
+                continue
 
-                    if i == -1 and j == 0:
-                        v["l"] = True
-                    elif i == 1 and j == 0:
-                        v["r"] = True
-                    elif i == 0 and j == -1:
-                        v["t"]
-                    elif i == 0 and j == 1:
-                        v["b"] = True
+            j = x0 - x
+            i = y0 - y
 
-                    elif i == j == -1:
-                        v["tl"] = True
-                    elif i == j == 1:
-                        v["br"] = True
-                    elif i == -j == -1:
-                        v["bl"] = True
-                    elif i == -j == 1:
-                        v["tr"] = True
+            if i == -1 and j == 0:
+                v["l"] = True
+            elif i == 1 and j == 0:
+                v["r"] = True
+            elif i == 0 and j == -1:
+                v["t"] = True
+            elif i == 0 and j == 1:
+                v["b"] = True
+
+            elif i == j == -1:
+                v["tl"] = True
+            elif i == j == 1:
+                v["br"] = True
+            elif i == -j == -1:
+                v["bl"] = True
+            elif i == -j == 1:
+                v["tr"] = True
         return v
 
 

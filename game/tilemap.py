@@ -64,7 +64,7 @@ class TileMap:
         x *= ts
         y *= ts
 
-        path = f"assets/tmp/{x}-{y}.png"
+        path = f"assets/tmp/{int(x)}-{int(y)}.png"
         img = self.tileset.crop((x, y, x+w, y+h)).save(path)
 
         return path
