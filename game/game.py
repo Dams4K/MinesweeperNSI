@@ -104,12 +104,12 @@ class Game(Menu):
         self.end_callback(self, True, 0, 0, self.placed_mines)
 
     def open_case(self, x, y):
-        if self.minesgrid[(x,y)]['image'] != self.DRAPEAU.name:
+        if self.minesgrid[(y,x)]['image'] != self.DRAPEAU.name:
             if self.minesweeper[y][x] != 1:
                 voisins = self.voisin(x,y)
                 nb_mines = sum([self.minesweeper[y1][x1] for x1,y1 in voisins])
 
-                button = self.minesgrid[(x,y)]
+                button = self.minesgrid[(y,x)]
                 
                 if (x%2 == 0 and y%2 ==0) or (x%2 == 1 and y%2 == 1):
                     button.config(bg=Game.BROWN1)
@@ -121,8 +121,8 @@ class Game(Menu):
                 else:
                     button.config(text=nb_mines)
                 
-                self.minesgrid[(x,y)].bind("<Button-2>", self.want_to_discover)
-                self.discovered_tiles.add((x,y))
+                self.minesgrid[(y,x)].bind("<Button-2>", self.want_to_discover)
+                self.discovered_tiles.add((y,x))
 
                 print(len(self.safe_tiles), len(self.discovered_tiles))
                 if len(self.safe_tiles) == len(self.discovered_tiles):
@@ -151,16 +151,43 @@ class Game(Menu):
         return button["bg"] in [Game.BROWN1, Game.BROWN2]
 
     def voisin_brown(self, x, y):
-        # button.config(image=self.tilemap(
-        #     tl=self.is_brown(self.minesgrid[x-1][y-1]),   t=self.is_brown(self.minesgrid[x][y-1]),  tr=self.is_brown(self.minesgrid[x+1][y-1]),
-        #     l=self.is_brown(self.minesgrid[x-1][y]),                                                r=self.is_brown(self.minesgrid[x+1][y]),
-        #     bl=self.is_brown(self.minesgrid[x-1][y+1]),   b=self.is_brown(self.minesgrid[x][y+1]),  br=self.is_brown(self.minesgrid[x+1][y+1])
-        # ))
-        v = {}
-        for i in [-1, 0, 1]:
-            for j in [-1, 0, 1]:
+        v = {
+            "l": False,
+            "r": False,
+            "t": False,
+            "b": False,
+            "tl": False,
+            "tr": False,
+            "bl": False,
+            "br": False
+        }
+
+        for j in [-1, 0, 1]:
+            for i in [-1, 0, 1]:
                 if 0 <= x+i < self.size[0] and 0 <= y+j < self.size[1]:
-                    pass
+                    brown = self.is_brown(self.minesgrid[(y+j, x+i)])
+                    if not brown:
+                        continue
+
+                    if i == -1 and j == 0:
+                        v["l"] = True
+                    elif i == 1 and j == 0:
+                        v["r"] = True
+                    elif i == 0 and j == -1:
+                        v["t"]
+                    elif i == 0 and j == 1:
+                        v["b"] = True
+
+                    elif i == j == -1:
+                        v["tl"] = True
+                    elif i == j == 1:
+                        v["br"] = True
+                    elif i == -j == -1:
+                        v["bl"] = True
+                    elif i == -j == 1:
+                        v["tr"] = True
+        return v
+
 
     def voisin(self, x, y):
         liste = [-1,0,1]

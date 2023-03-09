@@ -64,7 +64,10 @@ class TileMap:
         x *= ts
         y *= ts
 
-        return ImageTk.PhotoImage(self.tileset.crop((x, y, x+w, y+h)))
+        path = f"assets/tmp/{x}-{y}.png"
+        img = self.tileset.crop((x, y, x+w, y+h)).save(path)
+
+        return path
 
 if __name__ == "__main__":
     m = tk.Tk()
