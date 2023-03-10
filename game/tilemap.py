@@ -10,113 +10,164 @@ class TileMap:
 
         x, y = 0, 0
         w, h = ts, ts
+        
+        if l == r == b == bl == br == True:
+            x = 1
+            y = 0
+        if l == r == t == tl == tr == True:
+            x = 1
+            y = 2
+        if r == t == b == tr == br == True:
+            x = 0
+            y = 1
+        if l == t == b == tl == bl == True:
+            x = 2
+            y = 1
+
+        if r == b == br == True and l == t == tl == False:
+            x = y = 0
+        if l == b == bl == True and r == t == tr == False:
+            x = 2
+            y = 0
+        if r == t == tr == True and l == b == bl == False:
+            x = 0
+            y = 2
+        if l == t == tl == True and r == b == br == False:
+            x = 2
+            y = 2
+        
+        if r == True and l == t == b == tl == tr == bl == br == False:
+            x = 0
+            y = 3
+        if l == r == True and t == b == tl == tr == bl == br == False:
+            x = 1
+            y = 3
+        if l == True and r == t == b == tl == tr == bl == br == False:
+            x = 2
+            y = 3
+        
+        if b == True and l == r == t == tl == tr == bl == br == False:
+            x = 3
+            y = 0
+        if t == b == True and l == r == tl == tr == bl == br == False:
+            x = 3
+            y = 1
+        if t == True and l == r == b == tl == tr == bl == br == False:
+            x = 3
+            y = 2
+
+        if r == b == True and l == t == tl == tr == bl == br == False:
+            x = 4
+            y = 0
+        if l == b == True and r == t == tl == tr == bl == br == False:
+            x = 7
+            y = 0
+        if r == t == True and l == b == tl == tr == bl == br == False:
+            x = 4
+            y = 3
+        if l == t == True and r == b == tl == tr == bl == br == False:
+            x = 7
+            y = 3
+        
+
+        if l == r == b == bl == True and t == tl == tr == br == False:
+            x = 5
+            y = 0
+        if l == r == b == br == True and t == tl == tr == bl == False:
+            x = 6
+            y = 0
+        
+        if r == t == b == tr == True and l == tl == bl == br == False:
+            x = 4
+            y = 1
+        if r == t == b == tl == True and l == tr == bl == br == False:
+            x = 4
+            y = 2
+        
+        if l == t == b == tl == True and r == tr == bl == br == False:
+            x = 7
+            y = 1
+        if l == t == b == tr == True and r == tl == bl == br == False:
+            x = 7
+            y = 2
+        
+        if l == r == t == tl == True and b == tr == bl == br == False:
+            x = 5
+            y = 3
+        if l == r == t == tr == True and b == tl == bl == br == False:
+            x = 6
+            y = 3
+        
+
+        if l == r == t == b == tl == tr == bl == True and br == False:
+            x = 5
+            y = 1
+        if l == r == t == b == tl == tr == br == True and bl == False:
+            x = 6
+            y = 1
+        
+        if l == r == t == b == tl == bl == br == True and tr == False:
+            x = 5
+            y = 2
+        if l == r == t == b == tr == bl == br == True and tl == False:
+            x = 6
+            y = 2
+        
+
+        if r == t == b == True and l == tl == tr == bl == br == False:
+            x = 4
+            y = 4
+        if l == r == t == b == True and tl == tr == bl == br == False:
+            x = 5
+            y = 4
+        if l == r == t == b == True and tl == tr == bl == br == False:
+            x = 6
+            y = 4
+        if l == t == b == True and r == tl == tr == bl == br == False:
+            x = 7
+            y = 4
+
+        if l == r == b == True and t == tl == tr == bl == br == False:
+            x = 8
+            y = 0
+        if l == r == t == b == True and tl == tr == bl == br == False:
+            x = 8
+            y = 1
+        if l == r == t == b == True and bl == br == tl == tr == False:
+            x = 8
+            y = 2
+        if l == r == t == True and b == bl == br == tl == tr == False:
+            x = 8
+            y = 3
+        
+        if l == r == t == b == True and tl == tr == bl == br == False:
+            x = 8
+            y = 4
+        
+        if l == r == t == b == tl == br == True and tr == bl == False:
+            x = 9
+            y = 0
+        if l == r == t == b == tr == bl == True and tl == br == False:
+            x = 9
+            y = 1
+        
+        if l == r == t == b == br == True and tl == tr == bl == False:
+            x = 9
+            y = 2
+        if l == r == t == b == tr == True and tl == bl == br == False:
+            x = 9
+            y = 3
+        if l == r == t == b == tl == True and tr == bl == br == False:
+            x = 10
+            y = 3
+        if l == r == t == b == bl == True and tr == tl == br == False:
+            y = 10
+            y = 2
 
         if l == r == t == b == tl == tr == bl == br == False:
             x = y = 3
-        elif l == r == t == b == tl == tr == bl == br == True:
+        if l == r == t == b == tl == tr == bl == br == True:
             x = y = 1
-        
-        elif l == r == b == bl == br == True and t == tl == tr == False:
-            x = 1
-            y = 2
-        elif l == r == t == tl == tr == True and b == bl == br == False:
-            x = 1
-            y = 0
-        elif r == t == b == tr == br == True and l == tl == bl == False:
-            x = 0
-            y = 1
-        elif l == t == b == tl == bl == True and r == tr == br == False:
-            x = 2
-            y = 1
-        
-        elif r == b == br == True and l == t == tl == tr == bl == False:
-            x = y = 0
-        elif l == b == bl == True and r == t == tl == tr == br == False:
-            x = 2
-            y = 0
-        elif r == t == tr == True and l == b == tl == bl == br == False:
-            x = 0
-            y = 2
-        elif l == t == tl == True and r == b == tr == br == bl == False:
-            x = 2
-            y = 2
-        
-        elif r == True and l == t == b == tl == tr == bl == br == False:
-            x = 0
-            y = 3
-        elif l == r == True and t == b == tl == tr == bl == br == False:
-            x = 1
-            y = 3
-        elif l == True and r == t == b == tl == tr == bl == br == False:
-            x = 2
-            y = 3
-        
-        elif b == True and l == r == t == tl == tr == bl == br == False:
-            x = 3
-            y = 0
-        elif t == b == True and l == r == tl == tr == bl == br == False:
-            x = 3
-            y = 1
-        elif t == True and l == r == b == tl == tr == bl == br == False:
-            x = 3
-            y = 2
-
-        elif r == b == True and l == t == tl == tr == bl == br == False:
-            x = 4
-            y = 0
-        elif l == b == True and r == t == tl == tr == bl == br == False:
-            x = 7
-            y = 0
-        elif r == t == True and l == b == tl == tr == bl == br == False:
-            x = 4
-            y = 3
-        elif l == t == True and r == b == tl == tr == bl == br == False:
-            x = 7
-            y = 3
-        
-
-        elif l == r == b == bl == True and t == tl == tr == br == False:
-            x = 5
-            y = 0
-        elif l == r == b == br == True and t == tl == tr == bl == False:
-            x = 6
-            y = 0
-        
-        elif r == t == b == tr == True and l == tl == bl == br == False:
-            x = 4
-            y = 1
-        elif r == t == b == tl == True and l == tr == bl == br == False:
-            x = 4
-            y = 2
-        
-        elif l == t == b == tl == True and r == tr == bl == br == False:
-            x = 7
-            y = 1
-        elif l == t == b == tr == True and r == tl == bl == br == False:
-            x = 7
-            y = 2
-        
-        elif l == r == t == tl == True and b == tr == bl == br == False:
-            x = 5
-            y = 3
-        elif l == r == t == tr == True and b == tl == bl == br == False:
-            x = 6
-            y = 3
-        
-
-        elif l == r == t == b == tl == tr == bl == True and br == False:
-            x = 5
-            y = 1
-        elif l == r == t == b == tl == tr == br == True and bl == False:
-            x = 6
-            y = 1
-        
-        elif l == r == t == b == tl == bl == br == True and tr == False:
-            x = 5
-            y = 2
-        elif l == r == t == b == tr == bl == br == True and tl == False:
-            x = 6
-            y = 2
 
         x *= ts
         y *= ts

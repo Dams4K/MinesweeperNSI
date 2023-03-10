@@ -96,6 +96,7 @@ class Game(Menu):
             if value == button:
                 y, x = key
         
+        print(self.voisin_brown(x, y))
         voisins = self.voisin(x, y)
 
         nb_mines = sum([self.minesweeper[y1][x1] for y1, x1 in voisins])
@@ -177,31 +178,30 @@ class Game(Menu):
             "br": False
         }
 
-        for y0, x0 in self.voisin(x, y):
-            brown = self.is_brown(self.minesgrid[(y0, x0)])
-            if not brown:
-                continue
+        for j in [-1, 0, 1]:
+            for i in [-1, 0, 1]:
+                if 0 <= x+j < self.size[0] and 0 <= y+i < self.size[1]:
+                    brown = self.is_brown(self.minesgrid[(y+i, x+j)])
+                    if not brown:
+                        continue
+                        
+                    if i == -1 and j == 0:
+                        v["l"] = True
+                    elif i == 1 and j == 0:
+                        v["r"] = True
+                    elif i == 0 and j == -1:
+                        v["t"] = True
+                    elif i == 0 and j == 1:
+                        v["b"] = True
 
-            j = x0 - x
-            i = y0 - y
-
-            if i == -1 and j == 0:
-                v["l"] = True
-            elif i == 1 and j == 0:
-                v["r"] = True
-            elif i == 0 and j == -1:
-                v["t"] = True
-            elif i == 0 and j == 1:
-                v["b"] = True
-
-            elif i == j == -1:
-                v["tl"] = True
-            elif i == j == 1:
-                v["br"] = True
-            elif i == -j == -1:
-                v["bl"] = True
-            elif i == -j == 1:
-                v["tr"] = True
+                    elif i == j == -1:
+                        v["tl"] = True
+                    elif i == j == 1:
+                        v["br"] = True
+                    elif i == -j == -1:
+                        v["bl"] = True
+                    elif i == -j == 1:
+                        v["tr"] = True
         return v
 
 
