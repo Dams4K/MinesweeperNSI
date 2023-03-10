@@ -3,6 +3,7 @@ from random import randint, choice
 from .menus import Menu
 from .tilemap import TileMap
 import time
+from PIL import Image
 
 class Game(Menu):
     GREENS = ["#5fd38d"]
@@ -38,17 +39,13 @@ class Game(Menu):
         self.minesgrid = {}
         for row in range(len(self.minesweeper)):
             for column in range(len(self.minesweeper[row])):
-                btn = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size)
+                btn = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, hover_img_path="assets/selector.png")
                 
                 btn.config(bg=choice(Game.GREENS))
-                # if (row%2 == 0 and column%2 ==0) or (row%2 == 1 and column%2 == 1):
-                #     btn.config(bg=Game.GREEN1)
-                # else:
-                #     btn.config(bg=Game.GREEN2)
-                
                 
                 btn.bind("<Button-1>", self.on_button_click)
                 btn.bind("<Button-3>", self.flag)
+
                 self.minesgrid[(column, row)] = btn
 
     def generate_mines(self, void_tiles: set):
@@ -66,7 +63,6 @@ class Game(Menu):
 
             voisins: set = set(self.voisin(rand_x, rand_y))
             voisins.add((rand_y, rand_x))
-            print(voisins, void_tiles, len(voisins.difference(void_tiles)), len(voisins))
 
             if self.minesweeper[rand_y][rand_x] != 1 and (len(voisins.difference(void_tiles)) == len(voisins) or counter < 1) and (rand_y, rand_x) not in void_tiles:
                 self.minesweeper[rand_y][rand_x] = 1

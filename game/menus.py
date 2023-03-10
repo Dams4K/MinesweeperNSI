@@ -23,6 +23,8 @@ class Menu(tk.Tk):
     
     @staticmethod
     def create_button(clazz, row, column, width=128, height=128, **kwargs):
+        hover_img_path = kwargs.pop("hover_img_path", None)
+
         frame = tk.Frame(clazz, width=width, height=height, highlightthickness=-10)
         btn = tk.Button(frame, bd=-2, highlightthickness=0, **kwargs)
 
@@ -32,9 +34,23 @@ class Menu(tk.Tk):
 
         frame.grid(row=row, column=column, padx=(0, 0), pady=(0, 0))
 
+        if hover_img_path is not None:
+            btn.bind("<Enter>", lambda e: Menu.on_hover(e, hover_img_path))
+            btn.bind("<Leave>", lambda e: Menu.on_leave(e))
+
         btn.grid(sticky="wens")
         return btn
+    
+    @staticmethod
+    def on_hover(event, img_path):
+        btn = event.widget
+        img = btn["image"]
 
+        print(btn["image"], img_path)
+    
+    @staticmethod
+    def on_leave(event):
+        pass
 
 
 if __name__ == "__main__":
