@@ -1,10 +1,11 @@
 import tkinter as tk
-from random import randint
+from random import randint, choice
 from .menus import Menu
 from .tilemap import TileMap
 import time
 
 class Game(Menu):
+    GREENS = ["#87de87"]
     GREEN1 = "DarkOliveGreen2"
     GREEN2 = "DarkOliveGreen3"
 
@@ -39,10 +40,11 @@ class Game(Menu):
             for column in range(len(self.minesweeper[row])):
                 btn = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size)
                 
-                if (row%2 == 0 and column%2 ==0) or (row%2 == 1 and column%2 == 1):
-                    btn.config(bg=Game.GREEN1)
-                else:
-                    btn.config(bg=Game.GREEN2)
+                btn.config(bg=choice(Game.GREENS))
+                # if (row%2 == 0 and column%2 ==0) or (row%2 == 1 and column%2 == 1):
+                #     btn.config(bg=Game.GREEN1)
+                # else:
+                #     btn.config(bg=Game.GREEN2)
                 
                 
                 btn.bind("<Button-1>", self.on_button_click)
@@ -221,7 +223,7 @@ class Game(Menu):
         for key, value in self.minesgrid.items():
             if value == button:
                 y, x = key
-        if button["bg"] in [Game.GREEN1, Game.GREEN2]:
+        if button["bg"] in Game.GREENS:
             if(button['image'] == self.DRAPEAU.name):
                 button.config(image='')
                 if self.minesweeper[y][x] == 1:
