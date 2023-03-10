@@ -37,22 +37,23 @@ class Game(Menu):
         self.minesgrid = {}
         for row in range(len(self.minesweeper)):
             for column in range(len(self.minesweeper[row])):
+                btn = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size)
+                
                 if (row%2 == 0 and column%2 ==0) or (row%2 == 1 and column%2 == 1):
-                    self.minesgrid[(column, row)] = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, bg=Game.GREEN1)
+                    btn.config(bg=Game.GREEN1)
                 else:
-                    self.minesgrid[(column, row)] = Menu.create_button(game_frame, row, column, compound=tk.CENTER, width=self.btn_size, height=self.btn_size, bg=Game.GREEN2)
+                    btn.config(bg=Game.GREEN2)
+                
+                
+                btn.bind("<Button-1>", self.on_button_click)
+                btn.bind("<Button-3>", self.flag)
+                self.minesgrid[(column, row)] = btn
 
-
-        for button in self.minesgrid.values():
-            if button['text'] == "" or button["color"] in [Game.BROWN1, Game.BROWN2]:
-                button.bind("<Button-1>", self.on_button_click)
-                button.bind("<Button-3>", self.flag)
-    
     def generate_mines(self, void_tiles: set):
         self.generated = True
         boxes_number = self.size[0] * self.size[1]
         mines_to_place = min(int(boxes_number * self.mines_percentage), boxes_number-1)
-        self.placed_mines = mines_to_place
+        self.placed_mines = 0
 
         counter = mines_to_place*3
 
@@ -68,14 +69,14 @@ class Game(Menu):
             if self.minesweeper[rand_y][rand_x] != 1 and (len(voisins.difference(void_tiles)) == len(voisins) or counter < 1) and (rand_y, rand_x) not in void_tiles:
                 self.minesweeper[rand_y][rand_x] = 1
                 mines_to_place -= 1
+                self.placed_mines += 1
 
         print("\n".join(str(e) for e in self.minesweeper))
-        self.safe_tiles = [(y, x) for x in range(self.size[0]) for y in range(self.size[1]) if self.minesweeper[y][x] != 1]
 
     def update_tilemap(self):
         for pos, button in self.minesgrid.items():
             y, x = pos
-            if self.is_brown(button):
+            if self.is_brown(button) and self.minesweeper[y][x] != 1:
                 vb = self.voisin_brown(x, y)
                 img_path = self.tilemap.get_image(**vb)
                 self.tilemap_imgs.setdefault(img_path, tk.PhotoImage(master=self, file=img_path))
@@ -105,6 +106,9 @@ class Game(Menu):
                 button_near = self.minesgrid[(y1, x1)]
                 if not self.is_brown(button_near):
                     self.open_case(x1, y1)
+        
+        if self.placed_mines == self.size[0]*self.size[1]-len(self.discovered_tiles):
+            self.gagne()
 
     def open_case(self, x, y):
         button = self.minesgrid[(y, x)]
@@ -126,10 +130,6 @@ class Game(Menu):
                 button.unbind("<Button-1>")
                 button.bind("<Button-1>", self.want_to_discover)
                 self.discovered_tiles.add((y, x))
-
-                # print(len(self.safe_tiles), len(self.discovered_tiles))
-                if len(self.safe_tiles) == len(self.discovered_tiles):
-                    self.gagne()
             else:
                 self.perdu(x, y)
 
@@ -138,12 +138,13 @@ class Game(Menu):
         for y in range(len(self.minesweeper)):
             for x in range(len(self.minesweeper[y])):
                 if self.minesweeper[y][x] == 1:
-                    self.bomb(y, x)
+                    self.bomb(x, y)
 
         self.end_callback(self, False, 0, self.found_mines, self.placed_mines)
         print("perdu")
 
     def gagne(self):
+        print("gagné")
         self.end_callback(self, True, 0, 0, self.placed_mines)
 
     def on_button_click(self, event):
