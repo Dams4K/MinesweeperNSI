@@ -36,23 +36,23 @@ class TileMap:
             x = 2
             y = 2
         
-        if r == True and l == t == b == tl == tr == bl == br == False:
+        if r == True and l == t == b == False:
             x = 0
             y = 3
-        if l == r == True and t == b == tl == tr == bl == br == False:
+        if l == r == True and t == b == False:
             x = 1
             y = 3
-        if l == True and r == t == b == tl == tr == bl == br == False:
+        if l == True and r == t == b == False:
             x = 2
             y = 3
         
-        if b == True and l == r == t == tl == tr == bl == br == False:
+        if b == True and l == r == t == False:
             x = 3
             y = 0
-        if t == b == True and l == r == tl == tr == bl == br == False:
+        if t == b == True and l == r == False:
             x = 3
             y = 1
-        if t == True and l == r == b == tl == tr == bl == br == False:
+        if t == True and l == r == b == False:
             x = 3
             y = 2
 
