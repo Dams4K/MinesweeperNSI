@@ -8,7 +8,7 @@ class TileMap:
     def get_image(self, l=False, r=False, t=False, b=False, tl=False, tr=False, bl=False, br=False):
         ts = self.tileset.size[1]/5
 
-        x, y = 0, 0
+        x, y = 0, 4
         w, h = ts, ts
         
         if l == r == b == bl == br == True:
@@ -23,19 +23,22 @@ class TileMap:
         if l == t == b == tl == bl == True:
             x = 2
             y = 1
-
-        if r == b == br == True and l == t == tl == False:
+        
+        if r == b == br == True and l == t == False:
             x = y = 0
-        if l == b == bl == True and r == t == tr == False:
+        if l == b == bl == True and r == t == False:
             x = 2
             y = 0
-        if r == t == tr == True and l == b == bl == False:
+        if r == t == tr == True and l == b == False:
             x = 0
             y = 2
-        if l == t == tl == True and r == b == br == False:
+        if l == t == tl == True and r == b == False:
             x = 2
             y = 2
         
+        if l == r == t == b == True:
+            x = y = 1
+
         if r == True and l == t == b == False:
             x = 0
             y = 3
@@ -70,31 +73,31 @@ class TileMap:
             y = 3
         
 
-        if l == r == b == bl == True and t == tl == tr == br == False:
+        if l == r == b == bl == True and t == br == False:
             x = 5
             y = 0
-        if l == r == b == br == True and t == tl == tr == bl == False:
+        if l == r == b == br == True and t == bl == False:
             x = 6
             y = 0
         
-        if r == t == b == tr == True and l == tl == bl == br == False:
+        if r == t == b == tr == True and l == br == False:
             x = 4
             y = 1
-        if r == t == b == tl == True and l == tr == bl == br == False:
+        if r == t == b == br == True and l == tr == False:
             x = 4
             y = 2
         
-        if l == t == b == tl == True and r == tr == bl == br == False:
+        if l == t == b == tl == True and r == bl == False:
             x = 7
             y = 1
-        if l == t == b == tr == True and r == tl == bl == br == False:
+        if l == t == b == bl == True and r == tl == False:
             x = 7
             y = 2
         
-        if l == r == t == tl == True and b == tr == bl == br == False:
+        if l == r == t == tl == True and b == tr == False:
             x = 5
             y = 3
-        if l == r == t == tr == True and b == tl == bl == br == False:
+        if l == r == t == tr == True and b == tl == False:
             x = 6
             y = 3
         
@@ -166,8 +169,6 @@ class TileMap:
 
         if l == r == t == b == tl == tr == bl == br == False:
             x = y = 3
-        if l == r == t == b == tl == tr == bl == br == True:
-            x = y = 1
 
         x *= ts
         y *= ts
