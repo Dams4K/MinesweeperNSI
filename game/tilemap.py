@@ -36,8 +36,8 @@ class TileMap:
             x = 2
             y = 2
         
-        if l == r == t == b == True:
-            x = y = 1
+        if l == r == t == b == False:
+            x = y = 3
 
         if r == True and l == t == b == False:
             x = 0
@@ -59,16 +59,16 @@ class TileMap:
             x = 3
             y = 2
 
-        if r == b == True and l == t == tl == tr == bl == br == False:
+        if r == b == True and l == t == br == False:
             x = 4
             y = 0
-        if l == b == True and r == t == tl == tr == bl == br == False:
+        if l == b == True and r == t == bl == False:
             x = 7
             y = 0
-        if r == t == True and l == b == tl == tr == bl == br == False:
+        if r == t == True and l == b == tr == False:
             x = 4
             y = 3
-        if l == t == True and r == b == tl == tr == bl == br == False:
+        if l == t == True and r == b == tl == False:
             x = 7
             y = 3
         
@@ -117,29 +117,29 @@ class TileMap:
             y = 2
         
 
-        if r == t == b == True and l == tl == tr == bl == br == False:
+        if r == t == b == True and l == tr == br == False:
             x = 4
             y = 4
-        if l == r == t == b == True and tl == tr == bl == br == False:
+        if l == r == t == b == tl == bl == True and tr == br == False:
             x = 5
             y = 4
-        if l == r == t == b == True and tl == tr == bl == br == False:
+        if l == r == t == b == tr == br == True and tl == bl == False:
             x = 6
             y = 4
-        if l == t == b == True and r == tl == tr == bl == br == False:
+        if l == t == b == True and r == tl == bl == False:
             x = 7
             y = 4
 
-        if l == r == b == True and t == tl == tr == bl == br == False:
+        if l == r == b == True and t == bl == br == False:
             x = 8
             y = 0
-        if l == r == t == b == True and tl == tr == bl == br == False:
+        if l == r == t == b == tl == tr == True and bl == br == False:
             x = 8
             y = 1
-        if l == r == t == b == True and bl == br == tl == tr == False:
+        if l == r == t == b == bl == br == True and tl == tr == False:
             x = 8
             y = 2
-        if l == r == t == True and b == bl == br == tl == tr == False:
+        if l == r == t == True and b == tl == tr == False:
             x = 8
             y = 3
         
@@ -167,8 +167,8 @@ class TileMap:
             y = 10
             y = 2
 
-        if l == r == t == b == tl == tr == bl == br == False:
-            x = y = 3
+        if l == r == t == b == tl == tr == bl == br == True:
+            x = y = 1
 
         x *= ts
         y *= ts
