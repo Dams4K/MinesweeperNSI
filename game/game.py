@@ -128,6 +128,7 @@ class Game(Menu):
 
                 button.unbind("<Button-1>")
                 button.bind("<Button-1>", self.want_to_discover)
+                button.bind("<Button-2>", self.want_to_discover)
                 self.discovered_tiles.add((y, x))
             else:
                 self.perdu(x, y)

@@ -9,7 +9,7 @@ def launch_game(minesweeper_size: tuple, mines_percentage: float = 0.15):
 
 def end_game(game_menu: Game, win: bool, time: float = 0, remaining_mines: int = 0, mines_to_place: int = 0):
     if win:
-        pass
+        win = Win(create_game, game_menu, time, mines_to_place)
     else:
         lose = Lose(create_game, game_menu, time, remaining_mines, mines_to_place)
 
