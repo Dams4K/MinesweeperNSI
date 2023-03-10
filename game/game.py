@@ -5,7 +5,7 @@ from .tilemap import TileMap
 import time
 
 class Game(Menu):
-    GREENS = ["#87de87"]
+    GREENS = ["#5fd38d"]
     GREEN1 = "DarkOliveGreen2"
     GREEN2 = "DarkOliveGreen3"
 
