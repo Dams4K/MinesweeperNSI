@@ -23,7 +23,7 @@ class Game(Menu):
 
         self.DRAPEAU = tk.PhotoImage(master=self, file ='Drapeau.png')
         self.MINE_IMAGE = tk.PhotoImage(master=self, file ='assets/bomb.png')
-        self.tilemap = TileMap("assets/tilemap.png")
+        self.tilemap = TileMap("assets/tilemap_greenland.png")
         self.tilemap_imgs = {}
 
         window_size = (min(1280, self.btn_size*size[0]), min(720, self.btn_size*size[1]))
