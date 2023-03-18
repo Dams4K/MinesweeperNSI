@@ -23,19 +23,3 @@ func _process(delta):
 		if ac == GRASS_TILE:
 			tile_map.set_cell(pos[0], pos[1], 0)
 			tile_map.update_bitmask_area(Vector2(pos[0], pos[1]))
-#			for j in [-1, 0, 1]:
-#				for i in [-1, 0, 1]:
-#					var x = pos.x + i
-#					var y = pos.y + j
-#					var cell_pos = Vector2(x, y)
-#					var cell = tile_map.get_cell_autotile_coord(cell_pos[0], cell_pos[1])
-#
-#					if not cell in [GRASS_TILE, Vector2(-1, -1)] or cell_pos == pos:
-#						cells.append(cell_pos)
-#
-#
-#			tile_map.set_cell(pos.x, pos.y, 0)
-#			tile_map.update_bitmask_area(pos)
-
-			
-	
