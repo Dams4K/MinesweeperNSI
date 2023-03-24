@@ -1,19 +1,4 @@
 extends Node2D
-
-const LAND_TILE = 0
-const GRASS_TILE = 1
-const FLAG_TILE = 2
-
-const DEBUG = true
-
-onready var tile_map_bomb = $"TileMap Bomb"
-onready var tile_map_number = $"TileMap Number"
-onready var tile_map: TileMap = $TileMap
-onready var camera_2d = $Camera2D
-onready var minesweeper = $Minesweeper
-
-onready var generated = false
-
 #func _ready():
 #	tile_map.clear()
 #	tile_map_bomb.clear()

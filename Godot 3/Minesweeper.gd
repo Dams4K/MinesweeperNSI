@@ -16,6 +16,9 @@ enum TILES_TYPE {
 	SAFE
 }
 
+func _ready():
+	randomize()
+
 func generate(safe_tiles: Array = []):
 	self.generate_map()
 	self.generate_bombs(safe_tiles)
@@ -33,10 +36,13 @@ func generate_bombs(safe_tiles: Array = []) -> void:
 	while mines_to_place > 0 and tries < MAX_TRIES:
 		var pos := Vector2(randi() % int(size.x), randi() % int(size.y))
 		if not self.is_bomb(pos) and not pos in safe_tiles:
-			self.map[pos.y][pos.x] = 1
+			self.map[pos.y][pos.x] = TILES_TYPE.BOMB
 			mines_to_place -= 1
 			tries = 0
 		tries += 1
+		
+		if tries == MAX_TRIES-1:
+			print_debug("failed to keep a tile safe")
 
 
 func get_tile(pos: Vector2) -> int:
@@ -56,9 +62,15 @@ func get_neighbors(pos: Vector2) -> Array:
 				neighbors.append(neighbor_pos)
 	return neighbors
 
+func get_bombs(positions: Array) -> Array:
+	var bombs = []
+	for position in positions:
+		if self.is_bomb(position):
+			bombs.append(position)
+	return bombs
 
 func is_bomb(pos: Vector2) -> bool:
-	return is_valid_pos(pos) and self.map[pos.y][pos.x] == 1
+	return is_valid_pos(pos) and self.map[pos.y][pos.x] == TILES_TYPE.BOMB
 func is_valid_pos(pos: Vector2) -> bool:
 	var valid_x = 0 <= pos.x and pos.x < self.size.x
 	var valid_y = 0 <= pos.y and pos.y < self.size.y
