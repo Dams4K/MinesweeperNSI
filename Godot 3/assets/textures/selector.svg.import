@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/flag.svg-e173679a8c55698155070333b893d8eb.stex"
+path="res://.import/selector.svg-9316ff9c1b08e8f4d855e44b3ca2d260.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/flag.svg"
-dest_files=[ "res://.import/flag.svg-e173679a8c55698155070333b893d8eb.stex" ]
+source_file="res://assets/textures/selector.svg"
+dest_files=[ "res://.import/selector.svg-9316ff9c1b08e8f4d855e44b3ca2d260.stex" ]
 
 [params]
 

@@ -1,29 +1,65 @@
+class_name Minesweeper
 extends Node
-onready var label = $Label
 
-const percent = 0.20
+const MAX_TRIES = 100
+
+export var bombs_percentage = 0.20
 
 export var size = Vector2(9,9)
-export var minesgrid = []
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass
-	
-	
-	
-func place_mine():
-	var mine_to_place = int(size[0]*size[1]*percent)
-	while mine_to_place >= 0:
-		var y = randi()%int(size[1])
-		var x = randi()%int(size[0])
-		while minesgrid[y][x] == 1:
-			y = randi()%int(size[1])
-			x = randi()%int(size[0])
-		minesgrid[y][x] = 1
-		mine_to_place -= 1
-	return true
-	
+var map: Array = []
+var flags: Array = []
 
+enum TILES_TYPE {
+	UNDEFINED,
+	BOMB,
+	SAFE
+}
+
+func generate(safe_tiles: Array = []):
+	self.generate_map()
+	self.generate_bombs(safe_tiles)
+
+func generate_map() -> void:
+	for y in range(self.size.y):
+		self.map.append([])
+		for x in range(self.size.x):
+			self.map[y].append(0)
+
+func generate_bombs(safe_tiles: Array = []) -> void:
+	var mines_to_place = int(self.size.x * self.size.y * self.bombs_percentage)
+	var tries = 0
 	
-	
+	while mines_to_place > 0 and tries < MAX_TRIES:
+		var pos := Vector2(randi() % int(size.x), randi() % int(size.y))
+		if not self.is_bomb(pos) and not pos in safe_tiles:
+			self.map[pos.y][pos.x] = 1
+			mines_to_place -= 1
+			tries = 0
+		tries += 1
+
+
+func get_tile(pos: Vector2) -> int:
+	if not self.is_valid_pos(pos):
+		return TILES_TYPE.UNDEFINED
+	if self.is_bomb(pos):
+		return TILES_TYPE.BOMB
+	else:
+		return TILES_TYPE.SAFE
+
+func get_neighbors(pos: Vector2) -> Array:
+	var neighbors = []
+	for j in [-1, 0, 1]:
+		for i in [-1, 0, 1]:
+			var neighbor_pos = Vector2(pos.x + i, pos.y + j)
+			if self.is_valid_pos(neighbor_pos):
+				neighbors.append(neighbor_pos)
+	return neighbors
+
+
+func is_bomb(pos: Vector2) -> bool:
+	return is_valid_pos(pos) and self.map[pos.y][pos.x] == 1
+func is_valid_pos(pos: Vector2) -> bool:
+	var valid_x = 0 <= pos.x and pos.x < self.size.x
+	var valid_y = 0 <= pos.y and pos.y < self.size.y
+	return valid_x and valid_y

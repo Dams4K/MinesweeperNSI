@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/flag.png-29c6a06ab0a1d25cfcfa38ea2a7baffa.stex"
+path="res://.import/grass_tiles.svg-39b1f7f0cb86822d1bf809481098ec67.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/flag.png"
-dest_files=[ "res://.import/flag.png-29c6a06ab0a1d25cfcfa38ea2a7baffa.stex" ]
+source_file="res://assets/textures/grass_tiles.svg"
+dest_files=[ "res://.import/grass_tiles.svg-39b1f7f0cb86822d1bf809481098ec67.stex" ]
 
 [params]
 
@@ -32,4 +32,4 @@ process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true
-svg/scale=1.0
+svg/scale=0.125
