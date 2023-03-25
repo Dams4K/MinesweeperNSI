@@ -9,8 +9,9 @@
 script = ExtResource( 2 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 512, 300 )
 current = true
+limit_smoothed = true
+editor_draw_limits = true
 
 [node name="Minesweeper" parent="." instance=ExtResource( 3 )]
 bombs_percentage = 0.1

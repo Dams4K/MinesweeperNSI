@@ -85,13 +85,15 @@ func discover(pos):
 			label.text = ""
 		
 		var neighbors_flagged = 0
+		var will_be_discovered = []
 		for neighbor in neighbors:
 			if neighbor in self.minesweeper.flags:
 				neighbors_flagged += 1
-				neighbors.erase(neighbor)
+			else:
+				will_be_discovered.append(neighbor)
 		
 		if neighbors_flagged == neighbors_bombs_number:
-			for neighbor in neighbors:
+			for neighbor in will_be_discovered:
 				var tile = self.tileMap.get_cellv(neighbor)
 				if tile != 0:
 					self.discover(neighbor)
