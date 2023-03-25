@@ -13,6 +13,7 @@ onready var tileMap: TileMap = $TileMap
 onready var bombsTileMap: TileMap = $BombsTileMap
 onready var flagsTileMap: TileMap = $FlagsTileMap
 onready var transitionTileMap: TileMap = $TransitionTileMap
+onready var selectorTileMap: TileMap = $SelectorTileMap
 
 onready var labels = $Labels
 
@@ -39,7 +40,12 @@ func _process(delta):
 	if not Engine.editor_hint:
 		var mouse_pos: Vector2 = get_global_mouse_position()
 		var tile_pos: Vector2 = self.tileMap.world_to_map(mouse_pos)
+		selectorTileMap.clear()
 		if self.minesweeper.is_valid_pos(tile_pos):
+			var tile = self.tileMap.get_cellv(tile_pos)
+			if tile == 1:
+				selectorTileMap.set_cellv(tile_pos, 0)
+			
 			if Input.is_action_just_pressed("discover_tile"):
 					if self.minesweeper.map.empty():
 						var neighbors = self.minesweeper.get_neighbors(tile_pos)
@@ -47,7 +53,6 @@ func _process(delta):
 					
 					self.discover(tile_pos)
 			elif Input.is_action_just_pressed("flag_tile"):
-				var tile = self.tileMap.get_cellv(tile_pos)
 				if tile == 1:
 					self.flag_tile(tile_pos)
 
