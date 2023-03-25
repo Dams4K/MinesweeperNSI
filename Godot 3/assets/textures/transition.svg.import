@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tilemap_greenland.svg-1c93ff00b3076891a09d04a409f5dce9.stex"
+path="res://.import/transition.svg-b74c2ca635a893a934455c85b4ff2d92.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/textures/tilemap_greenland.svg"
-dest_files=[ "res://.import/tilemap_greenland.svg-1c93ff00b3076891a09d04a409f5dce9.stex" ]
+source_file="res://assets/textures/transition.svg"
+dest_files=[ "res://.import/transition.svg-b74c2ca635a893a934455c85b4ff2d92.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=false
+flags/filter=true
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2
