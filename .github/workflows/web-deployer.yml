@@ -52,7 +52,7 @@ jobs:
         # Templates with godot 4 must be in ~/.local/share/godot/templates/${GODOT_VERSION}
         mkdir -v -p ~/.local/share/godot/templates/${GODOT_VERSION}
         
-        mv templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}
+        mv templates/* ~/.local/share/godot/templates/${GODOT_VERSION}
         mv godot/Godot* ${GITHUB_WORKSPACE}/godot.x86_64
 
         # Just cleaning
