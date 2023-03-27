@@ -1,6 +1,7 @@
 class_name Minesweeper
 extends Node
 
+
 const MAX_TRIES = 100
 
 export var bombs_percentage = 0.20

@@ -18,7 +18,7 @@ onready var selectorTileMap: TileMap = $SelectorTileMap
 onready var labels = $Labels
 
 func set_generate(v):
-	_ready()
+	generate()
 
 func clear_tilemaps():
 	tileMap.clear()
@@ -26,7 +26,7 @@ func clear_tilemaps():
 	flagsTileMap.clear()
 	transitionTileMap.clear()
 
-func _ready():
+func generate():
 	clear_tilemaps()
 	self.minesweeper = get_node_or_null(self.minesweeper_path)
 	
