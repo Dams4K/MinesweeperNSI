@@ -14,6 +14,7 @@ onready var bombsTileMap: TileMap = $BombsTileMap
 onready var flagsTileMap: TileMap = $FlagsTileMap
 onready var transitionTileMap: TileMap = $TransitionTileMap
 onready var selectorTileMap: TileMap = $SelectorTileMap
+onready var lose_menu = $"../LoseMenu"
 
 onready var labels = $Labels
 
@@ -67,12 +68,14 @@ func flag_tile(pos):
 func discover(pos):
 	if pos in self.minesweeper.flags:
 		return
-	
 	self.tileMap.set_cellv(pos, 0)
 	self.tileMap.update_bitmask_area(pos)
 	
 	if self.minesweeper.is_bomb(pos):
-		self.bombsTileMap.set_cellv(pos, 0)
+		self.minesweeper.discover_bombs()
+		lose_menu.visible = true
+		
+		
 	else:
 		var label = self.get_label(pos)
 		var neighbors = self.minesweeper.get_neighbors(pos)

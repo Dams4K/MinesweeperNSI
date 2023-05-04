@@ -8,6 +8,8 @@ export var bombs_percentage = 0.20
 
 export var size = Vector2(9,9)
 
+onready var minesweeper_gui = $"../MinesweeperGui"
+
 var map: Array = []
 var flags: Array = []
 
@@ -45,7 +47,6 @@ func generate_bombs(safe_tiles: Array = []) -> void:
 		if tries == MAX_TRIES-1:
 			print_debug("failed to keep a tile safe")
 
-
 func get_tile(pos: Vector2) -> int:
 	if not self.is_valid_pos(pos):
 		return TILES_TYPE.UNDEFINED
@@ -72,7 +73,19 @@ func get_bombs(positions: Array) -> Array:
 
 func is_bomb(pos: Vector2) -> bool:
 	return is_valid_pos(pos) and self.map[pos.y][pos.x] == TILES_TYPE.BOMB
+	
 func is_valid_pos(pos: Vector2) -> bool:
 	var valid_x = 0 <= pos.x and pos.x < self.size.x
 	var valid_y = 0 <= pos.y and pos.y < self.size.y
 	return valid_x and valid_y
+
+func discover_bombs() -> void:
+	for y in range(self.size.y):
+			for x in range(self.size.x):
+				if self.is_bomb(Vector2(x,y)):
+					if Vector2(x,y) in self.flags:
+						self.flags.erase(Vector2(x,y))
+						minesweeper_gui.flagsTileMap.set_cellv(Vector2(x,y), -1)
+					minesweeper_gui.tileMap.set_cellv(Vector2(x,y), 0)
+					minesweeper_gui.tileMap.update_bitmask_area(Vector2(x,y))
+					minesweeper_gui.bombsTileMap.set_cellv(Vector2(x,y), 0)
