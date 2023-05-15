@@ -8,21 +8,15 @@
 
 config_version=4
 
-_global_script_classes=[ {
-"base": "Node",
-"class": "Minesweeper",
-"language": "GDScript",
-"path": "res://minesweeper/Minesweeper.gd"
-} ]
-_global_script_class_icons={
-"Minesweeper": ""
-}
-
 [application]
 
 config/name="MinesweeperGodot"
 run/main_scene="res://Menu.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+Minesweeper="*res://minesweeper/Minesweeper.gd"
 
 [gdnative]
 

@@ -2,102 +2,25 @@
 
 [ext_resource path="res://minesweeper/CameraController.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
-[ext_resource path="res://minesweeper/Minesweeper.tscn" type="PackedScene" id=3]
+[ext_resource path="res://LoseMenu.tscn" type="PackedScene" id=3]
 [ext_resource path="res://minesweeper/MinesweeperGui.tscn" type="PackedScene" id=7]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 2 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="LoseMenu" parent="CanvasLayer" instance=ExtResource( 3 )]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
 limit_smoothed = true
 editor_draw_limits = true
 
-[node name="Minesweeper" parent="." instance=ExtResource( 3 )]
-bombs_percentage = 0.1
-size = Vector2( 9, 9 )
-
 [node name="MinesweeperGui" parent="." instance=ExtResource( 7 )]
-minesweeper_path = NodePath("../Minesweeper")
-
-[node name="CanvasLayer" type="CanvasLayer" parent="MinesweeperGui"]
-
-[node name="LoseMenu" type="CenterContainer" parent="MinesweeperGui/CanvasLayer"]
-visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Panel" type="Panel" parent="MinesweeperGui/CanvasLayer/LoseMenu"]
-self_modulate = Color( 1, 1, 1, 0.498039 )
-margin_left = 262.0
-margin_top = 175.0
-margin_right = 762.0
-margin_bottom = 425.0
-rect_min_size = Vector2( 500, 250 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="CenterContainer2" type="VBoxContainer" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="VBox" type="VBoxContainer" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2"]
-margin_right = 500.0
-margin_bottom = 250.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Label" type="Label" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox"]
-margin_right = 500.0
-margin_bottom = 123.0
-size_flags_horizontal = 7
-size_flags_vertical = 7
-text = "GAME OVER"
-align = 1
-valign = 1
-
-[node name="RetryMenu" type="VBoxContainer" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox"]
-margin_top = 127.0
-margin_right = 500.0
-margin_bottom = 250.0
-size_flags_horizontal = 7
-size_flags_vertical = 7
-
-[node name="Label" type="Label" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox/RetryMenu"]
-margin_right = 500.0
-margin_bottom = 59.0
-size_flags_horizontal = 3
-size_flags_vertical = 7
-text = "Would you like to play again ?"
-align = 1
-valign = 1
-
-[node name="RetryButtons" type="HBoxContainer" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox/RetryMenu"]
-margin_top = 63.0
-margin_right = 500.0
-margin_bottom = 123.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="RetryButton" type="Button" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox/RetryMenu/RetryButtons"]
-margin_right = 248.0
-margin_bottom = 60.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "Retry"
-
-[node name="GamemodeButton" type="Button" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox/RetryMenu/RetryButtons"]
-margin_left = 252.0
-margin_right = 500.0
-margin_bottom = 60.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "Change Gamemode"
 
 [node name="CameraController" parent="." instance=ExtResource( 1 )]
 camera_path = NodePath("../Camera2D")
 
-[connection signal="pressed" from="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox/RetryMenu/RetryButtons/RetryButton" to="MinesweeperGui" method="_on_RetryButton_pressed"]
-[connection signal="pressed" from="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox/RetryMenu/RetryButtons/GamemodeButton" to="MinesweeperGui" method="_on_GamemodeButton_pressed"]
+[connection signal="lose" from="MinesweeperGui" to="." method="_on_MinesweeperGui_lose"]
+[connection signal="won" from="MinesweeperGui" to="." method="_on_MinesweeperGui_won"]

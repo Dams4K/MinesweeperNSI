@@ -1,14 +1,19 @@
 extends Node2D
 
 onready var camera2D = $Camera2D
-onready var minesweeper = $Minesweeper
 onready var minesweeperGui = $MinesweeperGui
-
-var minesweeper_size = Vector2.ONE * 9
-var minesweeper_percentage = 0.15
+onready var lose_menu = $CanvasLayer/LoseMenu
 
 func _ready():
-	self.minesweeper.size = minesweeper_size
-	self.minesweeper.bombs_percentage = minesweeper_percentage
-	self.camera2D.position = self.minesweeper.size * 64 / 2
+	Minesweeper.clear()
+	lose_menu.hide()
+	self.camera2D.position = Minesweeper.size * 64 / 2
 	self.minesweeperGui.generate()
+
+
+func _on_MinesweeperGui_won():
+	pass
+
+
+func _on_MinesweeperGui_lose():
+	lose_menu.show()
