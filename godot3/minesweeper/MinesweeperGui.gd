@@ -2,6 +2,8 @@ tool
 extends Node2D
 
 const MINESWEEPER_LABEL := preload("res://minesweeper/MinesweeperLabel.tscn")
+onready var main = $".."
+
 
 export var generate: bool = false setget set_generate
 
@@ -14,7 +16,7 @@ onready var bombsTileMap: TileMap = $BombsTileMap
 onready var flagsTileMap: TileMap = $FlagsTileMap
 onready var transitionTileMap: TileMap = $TransitionTileMap
 onready var selectorTileMap: TileMap = $SelectorTileMap
-onready var lose_menu = $"../LoseMenu"
+onready var lose_menu = $CanvasLayer/LoseMenu
 
 onready var labels = $Labels
 
@@ -35,10 +37,12 @@ func generate():
 		for x in range(self.minesweeper.size.x):
 			tileMap.set_cell(x, y, 1)
 			transitionTileMap.set_cell(x, y, 0)
+			var label = self.get_label(Vector2(x,y))
+			label.text = ""
 	transitionTileMap.update_bitmask_region(Vector2.ZERO, self.minesweeper.size)
-
+	
 func _process(delta):
-	if not Engine.editor_hint:
+	if not Engine.editor_hint and minesweeper:
 		var mouse_pos: Vector2 = get_global_mouse_position()
 		var tile_pos: Vector2 = self.tileMap.world_to_map(mouse_pos)
 		selectorTileMap.clear()
@@ -110,3 +114,20 @@ func get_label(pos: Vector2):
 		label.rect_position = pos * 64
 		labels.add_child(label)
 	return label
+	
+	
+
+
+
+
+func _on_RetryButton_pressed():
+	lose_menu.visible = false
+	preload("res://minesweeper/MinesweeperLabel.tscn")
+	minesweeper.clear()
+	generate()
+	
+
+func _on_GamemodeButton_pressed():
+	lose_menu.visible = false
+	get_tree().change_scene("res://Menu.tscn")
+	

@@ -20,35 +20,36 @@ size = Vector2( 9, 9 )
 [node name="MinesweeperGui" parent="." instance=ExtResource( 7 )]
 minesweeper_path = NodePath("../Minesweeper")
 
-[node name="CameraController" parent="." instance=ExtResource( 1 )]
-camera_path = NodePath("../Camera2D")
+[node name="CanvasLayer" type="CanvasLayer" parent="MinesweeperGui"]
 
-[node name="LoseMenu" type="Control" parent="."]
+[node name="LoseMenu" type="CenterContainer" parent="MinesweeperGui/CanvasLayer"]
 visible = false
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Panel" type="Panel" parent="LoseMenu"]
-self_modulate = Color( 1, 1, 1, 0.498039 )
-margin_left = 40.0
-margin_top = 40.0
-margin_right = 540.0
-margin_bottom = 290.0
-rect_min_size = Vector2( 500, 250 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="CenterContainer" type="VBoxContainer" parent="LoseMenu/Panel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="LoseMenu/Panel/CenterContainer"]
+[node name="Panel" type="Panel" parent="MinesweeperGui/CanvasLayer/LoseMenu"]
+self_modulate = Color( 1, 1, 1, 0.498039 )
+margin_left = 262.0
+margin_top = 175.0
+margin_right = 762.0
+margin_bottom = 425.0
+rect_min_size = Vector2( 500, 250 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="CenterContainer2" type="VBoxContainer" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBox" type="VBoxContainer" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2"]
+margin_right = 500.0
+margin_bottom = 250.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox"]
 margin_right = 500.0
 margin_bottom = 123.0
 size_flags_horizontal = 7
@@ -57,14 +58,14 @@ text = "GAME OVER"
 align = 1
 valign = 1
 
-[node name="RetryMenu" type="VBoxContainer" parent="LoseMenu/Panel/CenterContainer"]
+[node name="RetryMenu" type="VBoxContainer" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox"]
 margin_top = 127.0
 margin_right = 500.0
 margin_bottom = 250.0
 size_flags_horizontal = 7
 size_flags_vertical = 7
 
-[node name="Label" type="Label" parent="LoseMenu/Panel/CenterContainer/RetryMenu"]
+[node name="Label" type="Label" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox/RetryMenu"]
 margin_right = 500.0
 margin_bottom = 59.0
 size_flags_horizontal = 3
@@ -73,24 +74,30 @@ text = "Would you like to play again ?"
 align = 1
 valign = 1
 
-[node name="RetryButtons" type="HBoxContainer" parent="LoseMenu/Panel/CenterContainer/RetryMenu"]
+[node name="RetryButtons" type="HBoxContainer" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox/RetryMenu"]
 margin_top = 63.0
 margin_right = 500.0
 margin_bottom = 123.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="LoseMenu/Panel/CenterContainer/RetryMenu/RetryButtons"]
+[node name="RetryButton" type="Button" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox/RetryMenu/RetryButtons"]
 margin_right = 248.0
 margin_bottom = 60.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Retry"
 
-[node name="Button2" type="Button" parent="LoseMenu/Panel/CenterContainer/RetryMenu/RetryButtons"]
+[node name="GamemodeButton" type="Button" parent="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox/RetryMenu/RetryButtons"]
 margin_left = 252.0
 margin_right = 500.0
 margin_bottom = 60.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Change Gamemode"
+
+[node name="CameraController" parent="." instance=ExtResource( 1 )]
+camera_path = NodePath("../Camera2D")
+
+[connection signal="pressed" from="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox/RetryMenu/RetryButtons/RetryButton" to="MinesweeperGui" method="_on_RetryButton_pressed"]
+[connection signal="pressed" from="MinesweeperGui/CanvasLayer/LoseMenu/Panel/CenterContainer2/VBox/RetryMenu/RetryButtons/GamemodeButton" to="MinesweeperGui" method="_on_GamemodeButton_pressed"]

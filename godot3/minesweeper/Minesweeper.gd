@@ -89,3 +89,7 @@ func discover_bombs() -> void:
 					minesweeper_gui.tileMap.set_cellv(Vector2(x,y), 0)
 					minesweeper_gui.tileMap.update_bitmask_area(Vector2(x,y))
 					minesweeper_gui.bombsTileMap.set_cellv(Vector2(x,y), 0)
+
+func clear() -> void:
+	self.map = []
+	self.flags = []
