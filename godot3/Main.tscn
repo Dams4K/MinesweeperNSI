@@ -10,8 +10,12 @@
 script = ExtResource( 2 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="LoseMenu" parent="CanvasLayer" instance=ExtResource( 3 )]
+__meta__ = {
+"_edit_use_anchors_": true
+}
 
 [node name="WinMenu" parent="CanvasLayer" instance=ExtResource( 4 )]
 

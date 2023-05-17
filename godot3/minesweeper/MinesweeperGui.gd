@@ -1,6 +1,7 @@
 tool
 extends Node2D
 
+const DIG_PARTICLE := preload("res://DigParticle.tscn")
 const MINESWEEPER_LABEL := preload("res://minesweeper/MinesweeperLabel.tscn")
 
 signal won
@@ -15,6 +16,7 @@ onready var transitionTileMap: TileMap = $TransitionTileMap
 onready var selectorTileMap: TileMap = $SelectorTileMap
 
 onready var labels = $Labels
+onready var particles = $Particles
 
 func set_generate(v):
 	generate()
@@ -77,6 +79,10 @@ func discover(pos):
 		return
 	self.tileMap.set_cellv(pos, 0)
 	self.tileMap.update_bitmask_area(pos)
+	var particle = DIG_PARTICLE.instance()
+	particles.add_child(particle)
+	particle.position = tileMap.map_to_world(pos) + Vector2.ONE * tileMap.cell_size / 2
+	particle.restart()
 	
 	if Minesweeper.is_bomb(pos):
 		emit_signal("lose")
