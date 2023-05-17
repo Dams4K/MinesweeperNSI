@@ -29,7 +29,7 @@ func generate_map() -> void:
 			self.map[y].append(0)
 
 func generate_bombs(safe_tiles: Array = []) -> void:
-	var mines_to_place = int(self.size.x * self.size.y * self.bombs_percentage)
+	var mines_to_place = number_of_mines()
 	var tries = 0
 	
 	while mines_to_place > 0 and tries < MAX_TRIES:
@@ -75,6 +75,12 @@ func get_bombs_from(positions: Array) -> Array:
 		if self.is_bomb(position):
 			bombs.append(position)
 	return bombs
+
+func number_of_tiles() -> int:
+	return self.size.x * self.size.y
+
+func number_of_mines() -> int:
+	return int(self.size.x * self.size.y * self.bombs_percentage)
 
 func is_bomb(pos: Vector2) -> bool:
 	return is_valid_pos(pos) and self.map[pos.y][pos.x] == TILES_TYPE.BOMB

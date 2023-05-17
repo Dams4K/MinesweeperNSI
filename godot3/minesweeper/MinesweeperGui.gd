@@ -109,6 +109,9 @@ func discover(pos):
 				var tile = self.tileMap.get_cellv(neighbor)
 				if tile != 0:
 					self.discover(neighbor)
+		
+		if len(tileMap.get_used_cells_by_id(0)) == Minesweeper.number_of_tiles() - Minesweeper.number_of_mines():
+			emit_signal("won")
 
 
 func get_label(pos: Vector2):
