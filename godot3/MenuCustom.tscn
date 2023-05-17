@@ -1,12 +1,20 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://MenuCustom.gd" type="Script" id=1]
+[ext_resource path="res://assets/themes/default_theme.tres" type="Theme" id=2]
+[ext_resource path="res://assets/fonts/Roboto/Roboto-Medium.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://assets/fonts/dynamic/h2_font.tres" type="DynamicFont" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+size = 24
+font_data = ExtResource( 3 )
 
 [node name="Control" type="CenterContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource( 2 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": true
@@ -14,10 +22,10 @@ __meta__ = {
 
 [node name="Panel" type="Panel" parent="."]
 margin_left = 262.0
-margin_top = 150.0
+margin_top = 200.0
 margin_right = 762.0
-margin_bottom = 450.0
-rect_min_size = Vector2( 500, 300 )
+margin_bottom = 400.0
+rect_min_size = Vector2( 500, 200 )
 rect_pivot_offset = Vector2( 250, 150 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
@@ -26,58 +34,78 @@ anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+[node name="Label" type="Label" parent="Panel/VBoxContainer"]
 margin_right = 500.0
-margin_bottom = 248.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="SizeX" type="SpinBox" parent="Panel/VBoxContainer/HBoxContainer"]
-margin_right = 164.0
-margin_bottom = 248.0
-rect_pivot_offset = Vector2( -488, -17 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
-min_value = 1.0
-max_value = 1000.0
-value = 9.0
-
-[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer"]
-margin_left = 168.0
-margin_right = 332.0
-margin_bottom = 248.0
-size_flags_horizontal = 3
+margin_bottom = 57.0
 size_flags_vertical = 7
-text = "x"
+custom_fonts/font = ExtResource( 4 )
+text = "Partie personnalisé"
 align = 1
-valign = 1
 
-[node name="SizeY" type="SpinBox" parent="Panel/VBoxContainer/HBoxContainer"]
-margin_left = 336.0
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer"]
+margin_top = 61.0
 margin_right = 500.0
-margin_bottom = 248.0
+margin_bottom = 65.0
+
+[node name="WidthContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+margin_top = 69.0
+margin_right = 500.0
+margin_bottom = 100.0
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/WidthContainer"]
+margin_top = 1.0
+margin_right = 113.0
+margin_bottom = 30.0
+text = "Longueur :"
+
+[node name="WidthSpinBox" type="SpinBox" parent="Panel/VBoxContainer/WidthContainer"]
+margin_left = 409.0
+margin_right = 500.0
+margin_bottom = 31.0
 rect_pivot_offset = Vector2( -488, -17 )
-size_flags_horizontal = 3
+size_flags_horizontal = 10
 size_flags_vertical = 3
 min_value = 1.0
 max_value = 1000.0
 value = 9.0
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/VBoxContainer"]
-margin_top = 252.0
+[node name="HeightContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+margin_top = 104.0
 margin_right = 500.0
-margin_bottom = 276.0
+margin_bottom = 135.0
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer2"]
-margin_top = 5.0
-margin_right = 143.0
-margin_bottom = 19.0
-text = "Pourcentage de mines"
+[node name="Label" type="Label" parent="Panel/VBoxContainer/HeightContainer"]
+margin_top = 1.0
+margin_right = 97.0
+margin_bottom = 30.0
+text = "Hauteur :"
 
-[node name="MineSlider" type="HSlider" parent="Panel/VBoxContainer/HBoxContainer2"]
-margin_left = 147.0
-margin_right = 422.0
-margin_bottom = 24.0
+[node name="HeightSpinBox" type="SpinBox" parent="Panel/VBoxContainer/HeightContainer"]
+margin_left = 409.0
+margin_right = 500.0
+margin_bottom = 31.0
+rect_pivot_offset = Vector2( -488, -17 )
+size_flags_horizontal = 10
+size_flags_vertical = 3
+min_value = 1.0
+max_value = 1000.0
+value = 9.0
+
+[node name="Percentage" type="HBoxContainer" parent="Panel/VBoxContainer"]
+margin_top = 139.0
+margin_right = 500.0
+margin_bottom = 170.0
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer/Percentage"]
+margin_top = 1.0
+margin_right = 140.0
+margin_bottom = 30.0
+text = "% de mines : "
+
+[node name="MinesSlider" type="HSlider" parent="Panel/VBoxContainer/Percentage"]
+margin_left = 144.0
+margin_right = 405.0
+margin_bottom = 31.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 min_value = 0.01
@@ -85,19 +113,20 @@ max_value = 1.0
 step = 0.01
 value = 0.15
 
-[node name="MinePercentage" type="SpinBox" parent="Panel/VBoxContainer/HBoxContainer2"]
-margin_left = 426.0
+[node name="MinesPercentage" type="SpinBox" parent="Panel/VBoxContainer/Percentage"]
+margin_left = 409.0
 margin_right = 500.0
-margin_bottom = 24.0
+margin_bottom = 31.0
 min_value = 0.01
 max_value = 1.0
 step = 0.01
 value = 0.15
 
 [node name="ValidateButton" type="Button" parent="Panel/VBoxContainer"]
-margin_top = 280.0
+margin_top = 174.0
 margin_right = 500.0
-margin_bottom = 300.0
+margin_bottom = 203.0
+custom_fonts/font = SubResource( 1 )
 text = "Valider"
 
 [connection signal="pressed" from="Panel/VBoxContainer/ValidateButton" to="." method="_on_ValidateButton_pressed"]

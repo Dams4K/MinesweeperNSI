@@ -2,17 +2,19 @@ extends CenterContainer
 
 const MAIN = preload("res://Main.tscn")
 
-onready var mine_slider = $Panel/VBoxContainer/HBoxContainer2/MineSlider
-onready var mine_spinbox = $Panel/VBoxContainer/HBoxContainer2/MinePercentage
+onready var mines_slider = $Panel/VBoxContainer/Percentage/MinesSlider
+onready var mines_percentage = $Panel/VBoxContainer/Percentage/MinesPercentage
+
 onready var validate_button = $Panel/VBoxContainer/ValidateButton
-onready var size_x = $Panel/VBoxContainer/HBoxContainer/SizeX
-onready var size_y = $Panel/VBoxContainer/HBoxContainer/SizeY
+onready var width_spin_box = $Panel/VBoxContainer/WidthContainer/WidthSpinBox
+
+onready var height_spin_box = $Panel/VBoxContainer/HeightContainer/HeightSpinBox
 
 func _ready():
-	mine_slider.share(mine_spinbox)
+	mines_slider.share(mines_percentage)
 
 
 func _on_ValidateButton_pressed():
-	Minesweeper.size = Vector2(size_x.value ,size_y.value)
-	Minesweeper.bombs_percentage = mine_spinbox.value
+	Minesweeper.size = Vector2(width_spin_box.value, height_spin_box.value)
+	Minesweeper.bombs_percentage = mines_percentage.value
 	get_tree().change_scene_to(MAIN)

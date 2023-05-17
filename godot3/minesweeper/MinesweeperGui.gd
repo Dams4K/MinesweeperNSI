@@ -19,11 +19,13 @@ onready var labels = $Labels
 func set_generate(v):
 	generate()
 
+
 func clear_tilemaps():
 	if tileMap: tileMap.clear()
 	if bombsTileMap: bombsTileMap.clear()
 	if flagsTileMap: flagsTileMap.clear()
 	if transitionTileMap: transitionTileMap.clear()
+
 
 func generate():
 	clear_tilemaps()
@@ -38,6 +40,7 @@ func generate():
 	
 	if transitionTileMap:
 		transitionTileMap.update_bitmask_region(Vector2.ZERO, Minesweeper.size)
+
 
 func _process(delta):
 	if not Engine.editor_hint:
@@ -59,6 +62,7 @@ func _process(delta):
 				if tile == 1:
 					self.flag_tile(tile_pos)
 
+
 func flag_tile(pos):
 	if pos in Minesweeper.flags:
 		Minesweeper.flags.erase(pos)
@@ -66,6 +70,7 @@ func flag_tile(pos):
 	else:
 		Minesweeper.flags.append(pos)
 		self.flagsTileMap.set_cellv(pos, 0)
+
 
 func discover(pos):
 	if pos in Minesweeper.flags:
@@ -79,7 +84,7 @@ func discover(pos):
 			tileMap.set_cellv(bomb_pos, 0)
 			flagsTileMap.set_cellv(bomb_pos, -1)
 			bombsTileMap.set_cellv(bomb_pos, 0)
-			self.tileMap.update_bitmask_area(bomb_pos)
+		self.tileMap.update_bitmask_region(Vector2.ZERO, Minesweeper.size - Vector2.ONE)
 	else:
 		var label = self.get_label(pos)
 		var neighbors = Minesweeper.get_neighbors(pos)
@@ -115,13 +120,3 @@ func get_label(pos: Vector2):
 		label.rect_position = pos * 64
 		labels.add_child(label)
 	return label
-
-
-#func _on_RetryButton_pressed():
-#	preload("res://minesweeper/MinesweeperLabel.tscn")
-#	if Minesweeper:
-#		Minesweeper.clear()
-#		generate()
-#
-#func _on_GamemodeButton_pressed():
-#	get_tree().change_scene("res://Menu.tscn")
