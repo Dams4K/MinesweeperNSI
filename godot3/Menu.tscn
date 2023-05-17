@@ -5,14 +5,8 @@
 [ext_resource path="res://assets/fonts/dynamic/h1_font.tres" type="DynamicFont" id=3]
 
 [node name="Control" type="CenterContainer"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -512.0
-margin_top = -300.0
-margin_right = 512.0
-margin_bottom = 300.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 250, 150 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -28,23 +22,25 @@ rect_min_size = Vector2( 500, 300 )
 rect_pivot_offset = Vector2( 250, 150 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
-margin_right = 500.0
-margin_bottom = 300.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
+anchor_right = 1.0
+anchor_bottom = 1.0
 
 [node name="Label" type="Label" parent="Panel/VBoxContainer"]
 margin_right = 500.0
-margin_bottom = 148.0
+margin_bottom = 76.0
 size_flags_horizontal = 3
-size_flags_vertical = 7
+size_flags_vertical = 1
 custom_fonts/font = ExtResource( 3 )
 text = "Minesweeper"
 align = 1
-valign = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer"]
+margin_top = 80.0
+margin_right = 500.0
+margin_bottom = 84.0
 
 [node name="GridContainer" type="GridContainer" parent="Panel/VBoxContainer"]
-margin_top = 152.0
+margin_top = 88.0
 margin_right = 500.0
 margin_bottom = 300.0
 size_flags_horizontal = 3
@@ -53,7 +49,7 @@ columns = 2
 
 [node name="button9x9" type="Button" parent="Panel/VBoxContainer/GridContainer"]
 margin_right = 248.0
-margin_bottom = 72.0
+margin_bottom = 104.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "9x9"
@@ -61,24 +57,24 @@ text = "9x9"
 [node name="button15x15" type="Button" parent="Panel/VBoxContainer/GridContainer"]
 margin_left = 252.0
 margin_right = 500.0
-margin_bottom = 72.0
+margin_bottom = 104.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "15x15"
 
 [node name="button24x24" type="Button" parent="Panel/VBoxContainer/GridContainer"]
-margin_top = 76.0
+margin_top = 108.0
 margin_right = 248.0
-margin_bottom = 148.0
+margin_bottom = 212.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "24x24"
 
 [node name="buttoncustom" type="Button" parent="Panel/VBoxContainer/GridContainer"]
 margin_left = 252.0
-margin_top = 76.0
+margin_top = 108.0
 margin_right = 500.0
-margin_bottom = 148.0
+margin_bottom = 212.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "Custom"
