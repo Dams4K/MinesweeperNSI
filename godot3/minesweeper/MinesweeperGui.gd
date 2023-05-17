@@ -1,7 +1,7 @@
 tool
 extends Node2D
 
-const DIG_PARTICLE := preload("res://DigParticle.tscn")
+const DIG_PARTICLE := preload("res://DigParticles.tscn")
 const MINESWEEPER_LABEL := preload("res://minesweeper/MinesweeperLabel.tscn")
 
 signal won
