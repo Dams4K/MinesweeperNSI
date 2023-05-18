@@ -9,7 +9,8 @@ signal lose
 
 export var generate: bool = false setget set_generate
 
-onready var tileMap: TileMap = $TileMap
+onready var grassTileMap = $GrassTileMap
+onready var dirtTileMap = $DirtTileMap
 onready var bombsTileMap: TileMap = $BombsTileMap
 onready var flagsTileMap: TileMap = $FlagsTileMap
 onready var transitionTileMap: TileMap = $TransitionTileMap
@@ -23,7 +24,8 @@ func set_generate(v):
 
 
 func clear_tilemaps():
-	if tileMap: tileMap.clear()
+	if grassTileMap: grassTileMap.clear()
+	if dirtTileMap: dirtTileMap.clear()
 	if bombsTileMap: bombsTileMap.clear()
 	if flagsTileMap: flagsTileMap.clear()
 	if transitionTileMap: transitionTileMap.clear()
@@ -31,11 +33,12 @@ func clear_tilemaps():
 
 func generate():
 	clear_tilemaps()
+	grassTileMap.noise.seed = randi()
 	
-	if tileMap:
+	if grassTileMap:
 		for y in range(Minesweeper.size.y):
 			for x in range(Minesweeper.size.x):
-				tileMap.set_cell(x, y, 1)
+				grassTileMap.set_grass(x, y)
 				if transitionTileMap: transitionTileMap.set_cell(x, y, 0)
 				var label = self.get_label(Vector2(x,y))
 				label.text = ""
@@ -47,11 +50,11 @@ func generate():
 func _process(delta):
 	if not Engine.editor_hint:
 		var mouse_pos: Vector2 = get_global_mouse_position()
-		var tile_pos: Vector2 = self.tileMap.world_to_map(mouse_pos)
+		var tile_pos: Vector2 = selectorTileMap.world_to_map(mouse_pos)
 		selectorTileMap.clear()
 		if Minesweeper.is_valid_pos(tile_pos):
-			var tile = self.tileMap.get_cellv(tile_pos)
-			if tile == 1:
+			var not_digged = dirtTileMap.get_cellv(tile_pos) == -1
+			if not_digged:
 				selectorTileMap.set_cellv(tile_pos, 0)
 			
 			if Input.is_action_just_pressed("discover_tile"):
@@ -61,36 +64,37 @@ func _process(delta):
 				
 				self.discover(tile_pos)
 			elif Input.is_action_just_pressed("flag_tile"):
-				if tile == 1:
+				if not_digged:
 					self.flag_tile(tile_pos)
 
 
 func flag_tile(pos):
 	if pos in Minesweeper.flags:
 		Minesweeper.flags.erase(pos)
-		self.flagsTileMap.set_cellv(pos, -1)
+		flagsTileMap.set_cellv(pos, -1)
 	else:
 		Minesweeper.flags.append(pos)
-		self.flagsTileMap.set_cellv(pos, 0)
+		flagsTileMap.set_cellv(pos, 0)
 
 
 func discover(pos):
 	if pos in Minesweeper.flags:
 		return
-	self.tileMap.set_cellv(pos, 0)
-	self.tileMap.update_bitmask_area(pos)
+		
+	dirtTileMap.set_cellv(pos, 0)
+	dirtTileMap.update_bitmask_area(pos)
 	var particle = DIG_PARTICLE.instance()
 	particles.add_child(particle)
-	particle.position = tileMap.map_to_world(pos) + Vector2.ONE * tileMap.cell_size / 2
-	particle.restart()
+	particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
+	particle.play()
 	
 	if Minesweeper.is_bomb(pos):
 		emit_signal("lose")
 		for bomb_pos in Minesweeper.get_bombs():
-			tileMap.set_cellv(bomb_pos, 0)
+			dirtTileMap.set_cellv(bomb_pos, 0)
 			flagsTileMap.set_cellv(bomb_pos, -1)
 			bombsTileMap.set_cellv(bomb_pos, 0)
-		self.tileMap.update_bitmask_region(Vector2.ZERO, Minesweeper.size - Vector2.ONE)
+		dirtTileMap.update_bitmask_region(Vector2.ZERO, Minesweeper.size - Vector2.ONE)
 	else:
 		var label = self.get_label(pos)
 		var neighbors = Minesweeper.get_neighbors(pos)
@@ -112,11 +116,11 @@ func discover(pos):
 		
 		if neighbors_flagged == neighbors_bombs_number:
 			for neighbor in will_be_discovered:
-				var tile = self.tileMap.get_cellv(neighbor)
+				var tile = dirtTileMap.get_cellv(neighbor)
 				if tile != 0:
 					self.discover(neighbor)
 		
-		if len(tileMap.get_used_cells_by_id(0)) == Minesweeper.number_of_tiles() - Minesweeper.number_of_mines():
+		if len(dirtTileMap.get_used_cells_by_id(0)) == Minesweeper.number_of_tiles() - Minesweeper.number_of_mines():
 			emit_signal("won")
 
 
