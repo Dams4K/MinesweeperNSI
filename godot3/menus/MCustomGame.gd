@@ -1,6 +1,6 @@
 extends CenterContainer
 
-const MAIN = preload("res://Main.tscn")
+const GAME = preload("res://minesweeper/Game.tscn")
 
 onready var mines_slider = $Panel/VBoxContainer/Percentage/MinesSlider
 onready var mines_percentage = $Panel/VBoxContainer/Percentage/MinesPercentage
@@ -17,4 +17,4 @@ func _ready():
 func _on_ValidateButton_pressed():
 	Minesweeper.size = Vector2(width_spin_box.value, height_spin_box.value)
 	Minesweeper.bombs_percentage = mines_percentage.value
-	get_tree().change_scene_to(MAIN)
+	get_tree().change_scene_to(GAME)

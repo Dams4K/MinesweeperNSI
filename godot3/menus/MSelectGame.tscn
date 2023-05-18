@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Menu.gd" type="Script" id=1]
+[ext_resource path="res://menus/MSelectGame.gd" type="Script" id=1]
 [ext_resource path="res://assets/themes/default_theme.tres" type="Theme" id=2]
 [ext_resource path="res://assets/fonts/dynamic/h1_font.tres" type="DynamicFont" id=3]
 
