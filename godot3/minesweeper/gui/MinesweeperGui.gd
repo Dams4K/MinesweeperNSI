@@ -1,16 +1,16 @@
 tool
 extends Node2D
 
-const DIG_PARTICLE := preload("res://DigParticles.tscn")
-const MINESWEEPER_LABEL := preload("res://minesweeper/MinesweeperLabel.tscn")
+const DIGGING_PARTICLE := preload("res://minesweeper/gui/DiggingParticles.tscn")
+const MINESWEEPER_LABEL := preload("res://minesweeper/gui/MinesweeperLabel.tscn")
 
 signal won
 signal lose
 
 export var generate: bool = false setget set_generate
 
-onready var grassTileMap = $GrassTileMap
-onready var dirtTileMap = $DirtTileMap
+onready var grassTileMap: TileMap = $GrassTileMap
+onready var dirtTileMap: TileMap = $DirtTileMap
 onready var bombsTileMap: TileMap = $BombsTileMap
 onready var flagsTileMap: TileMap = $FlagsTileMap
 onready var transitionTileMap: TileMap = $TransitionTileMap
@@ -80,13 +80,15 @@ func flag_tile(pos):
 func discover(pos):
 	if pos in Minesweeper.flags:
 		return
-		
-	dirtTileMap.set_cellv(pos, 0)
-	dirtTileMap.update_bitmask_area(pos)
-	var particle = DIG_PARTICLE.instance()
-	particles.add_child(particle)
-	particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
-	particle.play()
+	
+	if dirtTileMap.get_cellv(pos) != 0:
+		dirtTileMap.set_cellv(pos, 0)
+		dirtTileMap.update_bitmask_area(pos)
+		var particle = DIGGING_PARTICLE.instance()
+	#	var particle = DIG_PARTICLE.instance()
+		particles.add_child(particle)
+		particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
+		particle.restart()
 	
 	if Minesweeper.is_bomb(pos):
 		emit_signal("lose")

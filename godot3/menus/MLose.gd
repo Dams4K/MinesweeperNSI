@@ -1,6 +1,6 @@
 extends CenterContainer
 
-const GAME = "res://minesweeper/Game.tscn"
+const GAME = "res://minesweeper/gui/Game.tscn"
 const M_SELECT_GAME = "res://menus/MSelectGame.tscn"
 
 signal retry

@@ -1,6 +1,6 @@
 extends Control
 
-const GAME = "res://minesweeper/Game.tscn"
+const GAME = "res://minesweeper/gui/Game.tscn"
 const M_CUSTOM_GAME = "res://menus/MCustomGame.tscn"
 
 export var default_minesweeper_size = Vector2.ONE * 9

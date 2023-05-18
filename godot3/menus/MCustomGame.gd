@@ -1,6 +1,6 @@
 extends CenterContainer
 
-const GAME = "res://minesweeper/Game.tscn"
+const GAME = "res://minesweeper/gui/Game.tscn"
 
 onready var mines_slider = $Panel/VBoxContainer/Percentage/MinesSlider
 onready var mines_percentage = $Panel/VBoxContainer/Percentage/MinesPercentage

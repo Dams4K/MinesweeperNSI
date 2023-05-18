@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://minesweeper/Game.gd" type="Script" id=1]
-[ext_resource path="res://minesweeper/MinesweeperGui.tscn" type="PackedScene" id=2]
+[ext_resource path="res://minesweeper/gui/Game.gd" type="Script" id=1]
+[ext_resource path="res://minesweeper/gui/MinesweeperGui.tscn" type="PackedScene" id=2]
 [ext_resource path="res://menus/MWin.tscn" type="PackedScene" id=3]
 [ext_resource path="res://menus/MLose.tscn" type="PackedScene" id=4]
-[ext_resource path="res://minesweeper/CameraController.tscn" type="PackedScene" id=5]
+[ext_resource path="res://minesweeper/gui/CameraController.tscn" type="PackedScene" id=5]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
