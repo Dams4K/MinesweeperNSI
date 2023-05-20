@@ -24,6 +24,26 @@ onready var particles = $Particles
 var tiles_to_discover = []
 
 var font: Font
+var color_codes = [
+	Color("00aad4"),
+	Color("00d4aa"),
+	Color("2ca05a"),
+	Color("44aa00"),
+	Color("88aa00"),
+	Color("d4aa00"),
+	Color("d45500"),
+	Color("aa0000"),
+]
+#var color_codes = [
+#	Color.black,
+#	Color.black,
+#	Color.black,
+#	Color.black,
+#	Color.black,
+#	Color.black,
+#	Color.black,
+#	Color.black,
+#]
 var strings_to_draw = {}
 
 func set_generate(v):
@@ -95,7 +115,7 @@ func _draw():
 			global_pos.x -= (font.get_char_tx_size(c).x - dirtTileMap.cell_size.x) / 2
 			global_pos.y += (font.get_char_tx_size(c).y + dirtTileMap.cell_size.y) / 2
 			
-			draw_string(font, global_pos, string, Color.black)
+			draw_string(font, global_pos, string, color_codes[number-1])
 
 func flag_tile(pos):
 	if pos in Minesweeper.flags:
@@ -113,7 +133,7 @@ func discover(pos):
 		return
 	
 	if dirtTileMap.get_cellv(pos) != 0:
-		dirtTileMap.set_cellv(pos, 0)
+		dirtTileMap.set_cellv(pos, 0, false, false, false, Vector2.ONE)
 		var particle = DIGGING_PARTICLES.instance()
 		particles.add_child(particle)
 		particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
