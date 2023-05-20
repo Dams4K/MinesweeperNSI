@@ -19,6 +19,8 @@ onready var selectorTileMap: TileMap = $SelectorTileMap
 onready var labels = $Labels
 onready var particles = $Particles
 
+var tiles_to_discover = []
+var tiles_discovered = []
 
 func set_generate(v):
 	generate()
@@ -41,8 +43,6 @@ func generate():
 			for x in range(Minesweeper.size.x):
 				grassTileMap.set_grass(x, y)
 				if transitionTileMap: transitionTileMap.set_cell(x, y, 0)
-				var label = self.get_label(Vector2(x,y))
-				label.text = ""
 	
 	if transitionTileMap:
 		transitionTileMap.update_bitmask_region(Vector2.ZERO, Minesweeper.size)
@@ -63,20 +63,17 @@ func _process(delta):
 					var neighbors = Minesweeper.get_neighbors(tile_pos)
 					Minesweeper.generate(neighbors)
 				
-				var tiles_to_discover = [tile_pos]
-				var tiles_discovered = []
-				var i = 0
-				while tiles_to_discover and i < 1024:
-					var tile_to_discover = tiles_to_discover.pop_front()
-					if not tile_to_discover in tiles_discovered:
-						bombsTileMap.set_cellv(tile_to_discover, 0)
-						yield(get_tree().create_timer(0.01), "timeout")
-						bombsTileMap.set_cellv(tile_to_discover, -1)
-						tiles_to_discover.append_array(self.discover(tile_to_discover))
-						tiles_discovered.append(tile_to_discover)
+				tiles_to_discover.append(tile_pos)
 			elif Input.is_action_just_pressed("flag_tile"):
 				if not_digged:
 					self.flag_tile(tile_pos)
+	
+	while tiles_to_discover:
+		var tile_to_discover = tiles_to_discover.pop_front()
+		bombsTileMap.set_cellv(tile_to_discover, 0)
+		yield(get_tree().create_timer(0.001), "timeout")
+		bombsTileMap.set_cellv(tile_to_discover, -1)
+		self.discover(tile_to_discover)
 
 
 func flag_tile(pos):
@@ -88,11 +85,9 @@ func flag_tile(pos):
 		flagsTileMap.set_cellv(pos, 0)
 
 
-func discover(pos) -> Array:
-	var tiles_to_discover = []
-	
+func discover(pos):
 	if pos in Minesweeper.flags:
-		return tiles_to_discover
+		return
 	
 	if dirtTileMap.get_cellv(pos) != 0:
 		dirtTileMap.set_cellv(pos, 0)
@@ -132,14 +127,11 @@ func discover(pos) -> Array:
 		if neighbors_flagged == neighbors_bombs_number:
 			for neighbor in will_be_discovered:
 				var tile = dirtTileMap.get_cellv(neighbor)
-				if tile != 0:
-					print(tile)
+				if tile != 0 and not neighbor in dirtTileMap.get_used_cells_by_id(0) and not neighbor in tiles_to_discover:
 					tiles_to_discover.append(neighbor)
 		
 		if len(dirtTileMap.get_used_cells_by_id(0)) == Minesweeper.number_of_tiles() - Minesweeper.number_of_mines():
 			emit_signal("won")
-		
-	return tiles_to_discover
 
 
 func get_label(pos: Vector2):
