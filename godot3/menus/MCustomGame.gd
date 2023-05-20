@@ -15,6 +15,6 @@ func _ready():
 
 
 func _on_ValidateButton_pressed():
-	Minesweeper.size = Vector2(width_spin_box.value, height_spin_box.value)
+	Minesweeper.size = Vector2(clamp(width_spin_box.value, 2, 100), clamp(height_spin_box.value, 2, 100))
 	Minesweeper.bombs_percentage = mines_percentage.value
 	get_tree().change_scene(GAME)
