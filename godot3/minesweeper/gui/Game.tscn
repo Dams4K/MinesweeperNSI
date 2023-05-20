@@ -1,16 +1,16 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://minesweeper/gui/Game.gd" type="Script" id=1]
 [ext_resource path="res://minesweeper/gui/MinesweeperGui.tscn" type="PackedScene" id=2]
 [ext_resource path="res://menus/MWin.tscn" type="PackedScene" id=3]
 [ext_resource path="res://menus/MLose.tscn" type="PackedScene" id=4]
 [ext_resource path="res://minesweeper/gui/CameraController.tscn" type="PackedScene" id=5]
+[ext_resource path="res://menus/HUD.tscn" type="PackedScene" id=6]
 
 [node name="Main" type="Node2D"]
 script = ExtResource( 1 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="LoseMenu" parent="CanvasLayer" instance=ExtResource( 4 )]
 __meta__ = {
@@ -18,6 +18,9 @@ __meta__ = {
 }
 
 [node name="WinMenu" parent="CanvasLayer" instance=ExtResource( 3 )]
+
+[node name="HUD" parent="CanvasLayer" instance=ExtResource( 6 )]
+unique_name_in_owner = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 current = true
@@ -29,5 +32,7 @@ editor_draw_limits = true
 [node name="CameraController" parent="." instance=ExtResource( 5 )]
 camera_path = NodePath("../Camera2D")
 
+[connection signal="flag_placed" from="MinesweeperGui" to="." method="_on_MinesweeperGui_flag_placed"]
+[connection signal="flag_removed" from="MinesweeperGui" to="." method="_on_MinesweeperGui_flag_removed"]
 [connection signal="lose" from="MinesweeperGui" to="." method="_on_MinesweeperGui_lose"]
 [connection signal="won" from="MinesweeperGui" to="." method="_on_MinesweeperGui_won"]

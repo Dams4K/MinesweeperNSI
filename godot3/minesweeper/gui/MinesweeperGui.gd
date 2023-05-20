@@ -1,6 +1,9 @@
 tool
 extends Node2D
 
+signal flag_placed
+signal flag_removed
+
 const DIGGING_PARTICLE := preload("res://minesweeper/gui/DiggingParticles.tscn")
 
 signal won
@@ -74,7 +77,7 @@ func _process(delta):
 				tiles_to_discover.append(tile_pos)
 			elif Input.is_action_just_pressed("flag_tile"):
 				if not_digged:
-					self.flag_tile(tile_pos)
+					flag_tile(tile_pos)
 					
 	var i = min(Minesweeper.size.x, Minesweeper.size.y)
 	while tiles_to_discover and i > 0:
@@ -102,9 +105,11 @@ func flag_tile(pos):
 	if pos in Minesweeper.flags:
 		Minesweeper.flags.erase(pos)
 		flagsTileMap.set_cellv(pos, -1)
+		emit_signal("flag_removed")
 	else:
 		Minesweeper.flags.append(pos)
 		flagsTileMap.set_cellv(pos, 0)
+		emit_signal("flag_placed")
 
 
 func discover(pos):
@@ -152,5 +157,5 @@ func discover(pos):
 				if tile != 0 and not neighbor in dirtTileMap.get_used_cells_by_id(0) and not neighbor in tiles_to_discover:
 					tiles_to_discover.append(neighbor)
 		
-		if len(dirtTileMap.get_used_cells_by_id(0)) == Minesweeper.number_of_tiles() - Minesweeper.number_of_mines():
+		if len(dirtTileMap.get_used_cells_by_id(0)) == Minesweeper.number_of_tiles() - Minesweeper.number_of_bombs():
 			emit_signal("won")
