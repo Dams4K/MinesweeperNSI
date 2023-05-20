@@ -2,5 +2,5 @@
 
 [ext_resource path="res://minesweeper/gui/CameraController.gd" type="Script" id=1]
 
-[node name="CameraController" type="Node"]
+[node name="CameraController" type="Node2D"]
 script = ExtResource( 1 )
