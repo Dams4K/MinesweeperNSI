@@ -21,7 +21,6 @@ onready var selectorTileMap: TileMap = $SelectorTileMap
 onready var particles = $Particles
 
 var tiles_to_discover = []
-var tiles_discovered = []
 
 var font: Font
 var strings_to_draw = {}
@@ -44,8 +43,6 @@ func clear_tilemaps():
 
 
 func generate():
-	for i in range(4000):
-		tiles_discovered.append(Vector2(0, i))
 	clear_tilemaps()
 	grassTileMap.noise.seed = randi()
 	
@@ -83,9 +80,6 @@ func _process(delta):
 	while tiles_to_discover and i > 0:
 		i -= 1
 		var tile_to_discover = tiles_to_discover.pop_front()
-#		bombsTileMap.set_cellv(tile_to_discover, 0)
-#		yield(get_tree().create_timer(0.05), "timeout")
-#		bombsTileMap.set_cellv(tile_to_discover, -1)
 		discover(tile_to_discover)
 		if tiles_to_discover == []:
 			update() # redraw
