@@ -7,6 +7,7 @@ onready var lose_menu = $CanvasLayer/LoseMenu
 onready var win_menu = $CanvasLayer/WinMenu
 
 onready var hud = $"%HUD"
+onready var camera_controller = $"%CameraController"
 
 func _ready():
 	Minesweeper.clear()
@@ -23,6 +24,7 @@ func _on_MinesweeperGui_won():
 func _on_MinesweeperGui_lose():
 	canvas_layer.show()
 	lose_menu.show()
+	camera_controller.shake()
 
 
 func _on_MinesweeperGui_flag_placed():

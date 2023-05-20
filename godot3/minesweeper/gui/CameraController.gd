@@ -4,11 +4,16 @@ const ZOOM_SPEED = 0.1
 
 export var camera_path: NodePath
 export var cell_size = 128
+export var shake_amount = 25
 
 var camera2D: Camera2D
 
 var max_zoom = 100
 var min_zoom = 0.125
+
+var shaking = false
+
+onready var shaking_timer = $ShakingTimer
 
 func _ready():
 	camera2D = get_node_or_null(camera_path)
@@ -22,6 +27,13 @@ func _ready():
 	var height_zoom = (Minesweeper.size.y + 2) * cell_size / viewport_rect.size.y
 	camera2D.zoom = Vector2.ONE * max(width_zoom, height_zoom)
 	max_zoom = max(width_zoom, height_zoom) * 2
+
+func _process(delta):
+	if shaking:
+		camera2D.set_offset(Vector2(
+			rand_range(-1.0, 1.0) * shake_amount,
+			rand_range(-1.0, 1.0) * shake_amount
+		))
 
 func _input(event):
 	if Input.is_action_just_released("zoom_in"):
@@ -43,3 +55,10 @@ func set_camera_zoom(new_zoom):
 		camera2D.zoom = Vector2.ONE * value
 		return true
 	return false
+
+func shake():
+	shaking = true
+	shaking_timer.start()
+
+func _on_ShakingTimer_timeout():
+	shaking = false

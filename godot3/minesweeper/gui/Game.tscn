@@ -30,6 +30,7 @@ editor_draw_limits = true
 [node name="MinesweeperGui" parent="." instance=ExtResource( 2 )]
 
 [node name="CameraController" parent="." instance=ExtResource( 5 )]
+unique_name_in_owner = true
 camera_path = NodePath("../Camera2D")
 
 [connection signal="flag_placed" from="MinesweeperGui" to="." method="_on_MinesweeperGui_flag_placed"]
