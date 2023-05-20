@@ -35,6 +35,8 @@ func clear_tilemaps():
 
 
 func generate():
+	for i in range(4000):
+		tiles_discovered.append(Vector2(0, i))
 	clear_tilemaps()
 	grassTileMap.noise.seed = randi()
 	
@@ -67,12 +69,14 @@ func _process(delta):
 			elif Input.is_action_just_pressed("flag_tile"):
 				if not_digged:
 					self.flag_tile(tile_pos)
-	
-	while tiles_to_discover:
+					
+	var i = min(Minesweeper.size.x, Minesweeper.size.y)
+	while tiles_to_discover and i > 0:
+		i -= 1
 		var tile_to_discover = tiles_to_discover.pop_front()
-		bombsTileMap.set_cellv(tile_to_discover, 0)
-		yield(get_tree().create_timer(0.001), "timeout")
-		bombsTileMap.set_cellv(tile_to_discover, -1)
+#		bombsTileMap.set_cellv(tile_to_discover, 0)
+#		yield(get_tree().create_timer(0.05), "timeout")
+#		bombsTileMap.set_cellv(tile_to_discover, -1)
 		self.discover(tile_to_discover)
 
 
@@ -106,15 +110,13 @@ func discover(pos):
 			bombsTileMap.set_cellv(bomb_pos, 0)
 		dirtTileMap.update_bitmask_region(Vector2.ZERO, Minesweeper.size - Vector2.ONE)
 	else:
-		var label = self.get_label(pos)
 		var neighbors = Minesweeper.get_neighbors(pos)
 		var neighbors_bombs = Minesweeper.get_bombs_from(neighbors)
 		var neighbors_bombs_number = len(neighbors_bombs)
 		
 		if neighbors_bombs_number > 0:
+			var label = self.get_label(pos)
 			label.text = str(neighbors_bombs_number)
-		else:
-			label.text = ""
 		
 		var neighbors_flagged = 0
 		var will_be_discovered = []

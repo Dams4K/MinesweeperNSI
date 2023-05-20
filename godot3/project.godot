@@ -92,6 +92,11 @@ move_camera={
  ]
 }
 
+[network]
+
+limits/debugger_stdout/max_chars_per_second=20480
+limits/debugger_stdout/max_errors_per_second=1000
+
 [physics]
 
 common/enable_pause_aware_picking=true
