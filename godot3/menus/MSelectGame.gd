@@ -9,6 +9,7 @@ export var default_minesweeper_percentage = 0.15
 onready var grass_tile_map = $GrassTileMap
 
 func _ready():
+	_on_Control_resized()
 	Minesweeper.size = default_minesweeper_size
 	Minesweeper.bombs_percentage = default_minesweeper_percentage
 
