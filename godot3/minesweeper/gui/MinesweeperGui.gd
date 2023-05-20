@@ -132,6 +132,7 @@ func get_label(pos: Vector2):
 	if label == null:
 		label = MINESWEEPER_LABEL.instance()
 		label.name = label_name
-		label.rect_position = pos * 128
+		label.rect_position = pos * dirtTileMap.cell_size
+		label.rect_min_size = dirtTileMap.cell_size
 		labels.add_child(label)
 	return label

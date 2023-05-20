@@ -3,6 +3,7 @@ extends Node2D
 const ZOOM_SPEED = 0.1
 
 export var camera_path: NodePath
+export var cell_size = 128
 
 var camera2D: Camera2D
 
@@ -13,12 +14,12 @@ func _ready():
 	camera2D = get_node_or_null(camera_path)
 	camera2D.current = true
 	
-	camera2D.position = Minesweeper.size * 64 / 2
+	camera2D.position = Minesweeper.size * cell_size / 2
 	
 	var viewport_rect = get_viewport_rect()
 	
-	var width_zoom = (Minesweeper.size.x + 2) * 64 / viewport_rect.size.x
-	var height_zoom = (Minesweeper.size.y + 2) * 64 / viewport_rect.size.y
+	var width_zoom = (Minesweeper.size.x + 2) * cell_size / viewport_rect.size.x
+	var height_zoom = (Minesweeper.size.y + 2) * cell_size / viewport_rect.size.y
 	camera2D.zoom = Vector2.ONE * max(width_zoom, height_zoom)
 	max_zoom = max(width_zoom, height_zoom) * 2
 
