@@ -2,7 +2,6 @@ tool
 extends Node2D
 
 const DIGGING_PARTICLE := preload("res://minesweeper/gui/DiggingParticles.tscn")
-const MINESWEEPER_LABEL := preload("res://minesweeper/gui/MinesweeperLabel.tscn")
 
 signal won
 signal lose
@@ -16,15 +15,22 @@ onready var flagsTileMap: TileMap = $FlagsTileMap
 onready var transitionTileMap: TileMap = $TransitionTileMap
 onready var selectorTileMap: TileMap = $SelectorTileMap
 
-onready var labels = $Labels
 onready var particles = $Particles
 
 var tiles_to_discover = []
 var tiles_discovered = []
 
+var font: Font
+var strings_to_draw = {}
+
 func set_generate(v):
 	generate()
 
+
+func _ready():
+	font = DynamicFont.new()
+	font.font_data = load("res://assets/fonts/Roboto/Roboto-Black.ttf")
+	font.size = 96
 
 func clear_tilemaps():
 	if grassTileMap: grassTileMap.clear()
@@ -78,7 +84,19 @@ func _process(delta):
 #		yield(get_tree().create_timer(0.05), "timeout")
 #		bombsTileMap.set_cellv(tile_to_discover, -1)
 		self.discover(tile_to_discover)
+		if tiles_to_discover == []:
+			update() # redraw
 
+func _draw():
+	for number in strings_to_draw:
+		for pos in strings_to_draw[number]:
+			var string = str(number)
+			var c = ord(string)
+			var global_pos = dirtTileMap.map_to_world(pos)
+			global_pos.x -= (font.get_char_tx_size(c).x - dirtTileMap.cell_size.x) / 2
+			global_pos.y += (font.get_char_tx_size(c).y + dirtTileMap.cell_size.y) / 2
+			
+			draw_string(font, global_pos, string, Color.black)
 
 func flag_tile(pos):
 	if pos in Minesweeper.flags:
@@ -115,8 +133,10 @@ func discover(pos):
 		var neighbors_bombs_number = len(neighbors_bombs)
 		
 		if neighbors_bombs_number > 0:
-			var label = self.get_label(pos)
-			label.text = str(neighbors_bombs_number)
+			var strings_pos = strings_to_draw.get(neighbors_bombs_number, [])
+			if not pos in strings_pos:
+				strings_pos.append(pos)
+			strings_to_draw[neighbors_bombs_number] = strings_pos
 		
 		var neighbors_flagged = 0
 		var will_be_discovered = []
@@ -134,15 +154,3 @@ func discover(pos):
 		
 		if len(dirtTileMap.get_used_cells_by_id(0)) == Minesweeper.number_of_tiles() - Minesweeper.number_of_mines():
 			emit_signal("won")
-
-
-func get_label(pos: Vector2):
-	var label_name: String = "%s;%s" % [pos.x, pos.y]
-	var label: Label = labels.get_node_or_null(label_name)
-	if label == null:
-		label = MINESWEEPER_LABEL.instance()
-		label.name = label_name
-		label.rect_position = pos * dirtTileMap.cell_size
-		label.rect_min_size = dirtTileMap.cell_size
-		labels.add_child(label)
-	return label
