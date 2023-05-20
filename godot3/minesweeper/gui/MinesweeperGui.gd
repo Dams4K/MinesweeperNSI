@@ -4,7 +4,8 @@ extends Node2D
 signal flag_placed
 signal flag_removed
 
-const DIGGING_PARTICLE := preload("res://minesweeper/gui/DiggingParticles.tscn")
+const DIGGING_PARTICLES := preload("res://minesweeper/gui/particles/DiggingParticles.tscn")
+const EXPLISION_PARTICLES := preload("res://minesweeper/gui/particles/ExplosionParticles.tscn")
 
 signal won
 signal lose
@@ -113,7 +114,7 @@ func discover(pos):
 	
 	if dirtTileMap.get_cellv(pos) != 0:
 		dirtTileMap.set_cellv(pos, 0)
-		var particle = DIGGING_PARTICLE.instance()
+		var particle = DIGGING_PARTICLES.instance()
 		particles.add_child(particle)
 		particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
 		particle.restart()
@@ -124,6 +125,10 @@ func discover(pos):
 			dirtTileMap.set_cellv(bomb_pos, 0)
 			flagsTileMap.set_cellv(bomb_pos, -1)
 			bombsTileMap.set_cellv(bomb_pos, 0)
+		var particle = EXPLISION_PARTICLES.instance()
+		particles.add_child(particle)
+		particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
+		particle.restart()
 	else:
 		var neighbors = Minesweeper.get_neighbors(pos)
 		var neighbors_bombs = Minesweeper.get_bombs_from(neighbors)

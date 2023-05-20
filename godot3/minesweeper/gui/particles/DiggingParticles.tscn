@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/textures/particles/digging_circle.svg" type="Texture" id=1]
-[ext_resource path="res://minesweeper/gui/DiggingParticles.gd" type="Script" id=2]
+[ext_resource path="res://minesweeper/gui/particles/DiggingParticles.gd" type="Script" id=2]
 
 [sub_resource type="Curve" id=2]
 _data = [ Vector2( 0, 0 ), 0.0, 5.80549, 0, 0, Vector2( 0.0985222, 0.446591 ), -0.295743, -0.295743, 0, 0, Vector2( 1, 0.0090909 ), 0.0768938, 0.0, 0, 0 ]

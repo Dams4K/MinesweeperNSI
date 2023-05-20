@@ -62,3 +62,4 @@ func shake():
 
 func _on_ShakingTimer_timeout():
 	shaking = false
+	camera2D.set_offset(Vector2.ZERO)
