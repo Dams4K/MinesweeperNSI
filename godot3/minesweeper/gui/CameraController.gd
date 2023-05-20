@@ -38,9 +38,7 @@ func _input(event):
 
 func set_camera_zoom(new_zoom):
 	var value = clamp(camera2D.zoom.x / new_zoom, min_zoom, max_zoom)
-	print(value)
 	if stepify(camera2D.zoom.x, 0.02) != stepify(value, 0.02):
 		camera2D.zoom = Vector2.ONE * value
-		print(camera2D.zoom)
 		return true
 	return false

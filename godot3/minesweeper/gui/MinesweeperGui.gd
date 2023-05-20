@@ -132,6 +132,6 @@ func get_label(pos: Vector2):
 	if label == null:
 		label = MINESWEEPER_LABEL.instance()
 		label.name = label_name
-		label.rect_position = pos * 64
+		label.rect_position = pos * 128
 		labels.add_child(label)
 	return label
