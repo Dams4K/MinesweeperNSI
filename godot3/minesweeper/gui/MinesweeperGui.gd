@@ -86,9 +86,10 @@ func _process(delta):
 #		bombsTileMap.set_cellv(tile_to_discover, 0)
 #		yield(get_tree().create_timer(0.05), "timeout")
 #		bombsTileMap.set_cellv(tile_to_discover, -1)
-		self.discover(tile_to_discover)
+		discover(tile_to_discover)
 		if tiles_to_discover == []:
 			update() # redraw
+			dirtTileMap.update_bitmask_region(Vector2.ZERO, Minesweeper.size - Vector2.ONE)
 
 func _draw():
 	for number in strings_to_draw:
@@ -118,9 +119,7 @@ func discover(pos):
 	
 	if dirtTileMap.get_cellv(pos) != 0:
 		dirtTileMap.set_cellv(pos, 0)
-		dirtTileMap.update_bitmask_area(pos)
 		var particle = DIGGING_PARTICLE.instance()
-	#	var particle = DIG_PARTICLE.instance()
 		particles.add_child(particle)
 		particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
 		particle.restart()
@@ -131,7 +130,6 @@ func discover(pos):
 			dirtTileMap.set_cellv(bomb_pos, 0)
 			flagsTileMap.set_cellv(bomb_pos, -1)
 			bombsTileMap.set_cellv(bomb_pos, 0)
-		dirtTileMap.update_bitmask_region(Vector2.ZERO, Minesweeper.size - Vector2.ONE)
 	else:
 		var neighbors = Minesweeper.get_neighbors(pos)
 		var neighbors_bombs = Minesweeper.get_bombs_from(neighbors)
