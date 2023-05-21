@@ -86,9 +86,10 @@ func _process(delta):
 					Minesweeper.generate(neighbors)
 				
 				tiles_to_discover.append(tile_pos)
-			elif Input.is_action_just_pressed("auto_discover") and not Minesweeper.map.empty():
+			if Input.is_action_just_pressed("auto_discover") and not Minesweeper.map.empty():
 				clean_tiles_to_discover.append(tile_pos)
-			elif Input.is_action_just_pressed("flag_tile"):
+			
+			if Input.is_action_just_pressed("flag_tile"):
 				if not_digged:
 					flag_tile(tile_pos)
 					
