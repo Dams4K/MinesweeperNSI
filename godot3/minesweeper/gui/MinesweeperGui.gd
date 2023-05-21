@@ -21,6 +21,7 @@ onready var selectorTileMap: TileMap = $SelectorTileMap
 
 onready var particles = $Particles
 
+var clean_tiles_to_discover = []
 var tiles_to_discover = []
 
 var font: Font
@@ -34,16 +35,7 @@ var color_codes = [
 	Color("d45500"),
 	Color("aa0000"),
 ]
-#var color_codes = [
-#	Color.black,
-#	Color.black,
-#	Color.black,
-#	Color.black,
-#	Color.black,
-#	Color.black,
-#	Color.black,
-#	Color.black,
-#]
+
 var strings_to_draw = {}
 
 func set_generate(v):
@@ -65,7 +57,8 @@ func clear_tilemaps():
 
 func generate():
 	clear_tilemaps()
-	grassTileMap.noise.seed = randi()
+	if grassTileMap and grassTileMap.noise:
+		grassTileMap.noise.seed = randi()
 	
 	if grassTileMap:
 		for y in range(Minesweeper.size.y):
@@ -93,6 +86,8 @@ func _process(delta):
 					Minesweeper.generate(neighbors)
 				
 				tiles_to_discover.append(tile_pos)
+			elif Input.is_action_just_pressed("auto_discover") and not Minesweeper.map.empty():
+				clean_tiles_to_discover.append(tile_pos)
 			elif Input.is_action_just_pressed("flag_tile"):
 				if not_digged:
 					flag_tile(tile_pos)
@@ -100,9 +95,18 @@ func _process(delta):
 	var i = min(Minesweeper.size.x, Minesweeper.size.y)
 	while tiles_to_discover and i > 0:
 		i -= 1
-		var tile_to_discover = tiles_to_discover.pop_front()
-		discover(tile_to_discover)
+		var tile_pos = tiles_to_discover.pop_front()
+		discover(tile_pos)
 		if tiles_to_discover == []:
+			update() # redraw
+			dirtTileMap.update_bitmask_region(Vector2.ZERO, Minesweeper.size - Vector2.ONE)
+	
+	i = min(Minesweeper.size.x, Minesweeper.size.y)
+	while clean_tiles_to_discover and i > 0:
+		i -= 1
+		var tile_pos = clean_tiles_to_discover.pop_front()
+		clean_discover(tile_pos)
+		if clean_tiles_to_discover == []:
 			update() # redraw
 			dirtTileMap.update_bitmask_region(Vector2.ZERO, Minesweeper.size - Vector2.ONE)
 
@@ -127,18 +131,39 @@ func flag_tile(pos):
 		flagsTileMap.set_cellv(pos, 0)
 		emit_signal("flag_placed")
 
+func clean_discover(pos):
+	if pos in Minesweeper.flags:
+		return
+	elif dirtTileMap.get_cellv(pos) != 0:
+		return
+	
+	var neighbors = Minesweeper.get_neighbors(pos)
+	var neighbors_bombs = Minesweeper.get_bombs_from(neighbors)
+	var neighbors_bombs_number = len(neighbors_bombs)
+
+	if neighbors_bombs_number > 0:
+		var strings_pos = strings_to_draw.get(neighbors_bombs_number, [])
+		if not pos in strings_pos:
+			strings_pos.append(pos)
+		strings_to_draw[neighbors_bombs_number] = strings_pos
+	
+	var neighbors_flagged = 0
+	var will_be_discovered = []
+	for neighbor in neighbors:
+		if neighbor in Minesweeper.flags:
+			neighbors_flagged += 1
+		else:
+			will_be_discovered.append(neighbor)
+
+	if neighbors_flagged == neighbors_bombs_number:
+		for neighbor in will_be_discovered:
+			var tile = dirtTileMap.get_cellv(neighbor)
+			if tile != 0 and not neighbor in dirtTileMap.get_used_cells_by_id(0) and not neighbor in tiles_to_discover:
+				tiles_to_discover.append(neighbor)
 
 func discover(pos):
 	if pos in Minesweeper.flags:
 		return
-	
-	if dirtTileMap.get_cellv(pos) != 0:
-		dirtTileMap.set_cellv(pos, 0, false, false, false, Vector2.ONE)
-		if Config.get_value("Particles", "digging", true):
-			var particle = DIGGING_PARTICLES.instance()
-			particles.add_child(particle)
-			particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
-			particle.restart()
 	
 	if Minesweeper.is_bomb(pos):
 		emit_signal("lose")
@@ -152,30 +177,15 @@ func discover(pos):
 			particles.add_child(particle)
 			particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
 			particle.restart()
-	else:
-		var neighbors = Minesweeper.get_neighbors(pos)
-		var neighbors_bombs = Minesweeper.get_bombs_from(neighbors)
-		var neighbors_bombs_number = len(neighbors_bombs)
+	elif dirtTileMap.get_cellv(pos) != 0:
+		dirtTileMap.set_cellv(pos, 0, false, false, false, Vector2.ONE)
+		if Config.get_value("Particles", "digging", true):
+			var particle = DIGGING_PARTICLES.instance()
+			particles.add_child(particle)
+			particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
+			particle.restart()
 		
-		if neighbors_bombs_number > 0:
-			var strings_pos = strings_to_draw.get(neighbors_bombs_number, [])
-			if not pos in strings_pos:
-				strings_pos.append(pos)
-			strings_to_draw[neighbors_bombs_number] = strings_pos
-		
-		var neighbors_flagged = 0
-		var will_be_discovered = []
-		for neighbor in neighbors:
-			if neighbor in Minesweeper.flags:
-				neighbors_flagged += 1
-			else:
-				will_be_discovered.append(neighbor)
-		
-		if neighbors_flagged == neighbors_bombs_number:
-			for neighbor in will_be_discovered:
-				var tile = dirtTileMap.get_cellv(neighbor)
-				if tile != 0 and not neighbor in dirtTileMap.get_used_cells_by_id(0) and not neighbor in tiles_to_discover:
-					tiles_to_discover.append(neighbor)
+		clean_tiles_to_discover.append(pos)
 		
 		if len(dirtTileMap.get_used_cells_by_id(0)) == Minesweeper.number_of_tiles() - Minesweeper.number_of_bombs():
 			emit_signal("won")
