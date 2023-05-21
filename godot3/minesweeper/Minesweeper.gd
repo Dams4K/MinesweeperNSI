@@ -1,5 +1,7 @@
 extends Node
 
+signal generated
+
 const MAX_TRIES = 100
 
 export var bombs_percentage = 0.20
@@ -7,6 +9,8 @@ export var size = Vector2(9,9)
 
 var map: Array = []
 var flags: Array = []
+
+var total_bombs: int = -1
 
 enum TILES_TYPE {
 	UNDEFINED,
@@ -20,6 +24,7 @@ func _ready():
 func generate(safe_tiles: Array = []):
 	generate_map()
 	generate_bombs(safe_tiles)
+	emit_signal("generated")
 
 func generate_map() -> void:
 	for y in range(self.size.y):
@@ -28,7 +33,7 @@ func generate_map() -> void:
 			self.map[y].append(0)
 
 func generate_bombs(safe_tiles: Array = []) -> void:
-	var mines_to_place = number_of_bombs()
+	var mines_to_place = theoretical_number_of_bombs()
 	var tries = 0
 	
 	while mines_to_place > 0 and tries < MAX_TRIES:
@@ -41,6 +46,8 @@ func generate_bombs(safe_tiles: Array = []) -> void:
 		
 		if tries == MAX_TRIES-1:
 			print_debug("failed to keep a tile safe")
+	
+	total_bombs = theoretical_number_of_bombs() - mines_to_place
 
 func get_tile(pos: Vector2) -> int:
 	if not self.is_valid_pos(pos):
@@ -78,7 +85,7 @@ func get_bombs_from(positions: Array) -> Array:
 func number_of_tiles() -> int:
 	return self.size.x * self.size.y
 
-func number_of_bombs() -> int:
+func theoretical_number_of_bombs() -> int:
 	return int(self.size.x * self.size.y * self.bombs_percentage)
 
 func is_bomb(pos: Vector2) -> bool:

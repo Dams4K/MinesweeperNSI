@@ -80,14 +80,14 @@ func _process(delta):
 			if not_digged:
 				selectorTileMap.set_cellv(tile_pos, 0)
 			
-			if Input.is_action_just_pressed("auto_discover") and not Minesweeper.map.empty():
-				clean_tiles_to_discover.append(tile_pos)
 			if Input.is_action_just_pressed("discover_tile"):
 				if Minesweeper.map.empty():
 					var neighbors = Minesweeper.get_neighbors(tile_pos)
 					Minesweeper.generate(neighbors)
 				
 				tiles_to_discover.append(tile_pos)
+			if Input.is_action_just_pressed("auto_discover") and not Minesweeper.map.empty():
+				clean_tiles_to_discover.append(tile_pos)
 			
 			if Input.is_action_just_pressed("flag_tile"):
 				if not_digged:
@@ -159,7 +159,7 @@ func clean_discover(pos):
 	if neighbors_flagged == neighbors_bombs_number:
 		for neighbor in will_be_discovered:
 			var tile = dirtTileMap.get_cellv(neighbor)
-			if tile != 0 and not neighbor in dirtTileMap.get_used_cells_by_id(0) and not neighbor in tiles_to_discover and not neighbor in clean_tiles_to_discover:
+			if tile != 0 and not neighbor in dirtTileMap.get_used_cells_by_id(0) and not neighbor in tiles_to_discover:
 				tiles_to_discover.append(neighbor)
 
 func discover(pos):
@@ -188,5 +188,5 @@ func discover(pos):
 		
 		clean_tiles_to_discover.append(pos)
 		
-		if len(dirtTileMap.get_used_cells_by_id(0)) == Minesweeper.number_of_tiles() - Minesweeper.number_of_bombs():
+		if len(dirtTileMap.get_used_cells_by_id(0)) == Minesweeper.number_of_tiles() - Minesweeper.total_bombs:
 			emit_signal("won")
