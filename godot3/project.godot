@@ -12,7 +12,10 @@ config_version=4
 
 config/name="MinesweeperGodot"
 run/main_scene="res://menus/MSelectGame.tscn"
+boot_splash/image="res://assets/textures/boot_screen.png"
+boot_splash/bg_color=Color( 0.372549, 0.827451, 0.552941, 1 )
 config/icon="res://icon.svg"
+boot_splash/use_filter=true
 
 [autoload]
 
