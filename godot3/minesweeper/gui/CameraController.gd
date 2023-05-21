@@ -54,6 +54,9 @@ func _input(event):
 	if Input.is_action_pressed("center_camera"):
 		center_camera()
 	
+	camera2D.position.x = clamp(camera2D.position.x, get_center_position().x - get_viewport_rect().size.x * max_zoom / 2, get_center_position().x + get_viewport_rect().size.x * max_zoom / 2)
+	camera2D.position.y = clamp(camera2D.position.y, get_center_position().y - get_viewport_rect().size.y * max_zoom / 2, get_center_position().y + get_viewport_rect().size.y * max_zoom / 2)
+	
 	update_tilemap()
 
 func set_camera_zoom(new_zoom):
