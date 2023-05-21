@@ -26,6 +26,13 @@ margin_bottom = 29.0
 size_flags_horizontal = 2
 text = "?? bombes"
 
+[node name="TimerLabel" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+margin_left = 970.0
+margin_right = 1045.0
+margin_bottom = 29.0
+text = "0.000s"
+
 [node name="FlagsLabel" type="Label" parent="HBoxContainer"]
 unique_name_in_owner = true
 margin_left = 1937.0

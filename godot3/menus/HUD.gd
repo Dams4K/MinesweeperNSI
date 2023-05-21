@@ -3,6 +3,7 @@ extends Control
 onready var h_box_container = $HBoxContainer
 
 onready var bombs_number_label = $"%BombsNumberLabel"
+onready var timer_label = $"%TimerLabel"
 onready var flags_label = $"%FlagsLabel"
 
 onready var total_bombs = Minesweeper.theoretical_number_of_bombs()
