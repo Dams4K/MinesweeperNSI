@@ -134,6 +134,8 @@ func flag_tile(pos):
 func clean_discover(pos):
 	if pos in Minesweeper.flags:
 		return
+	elif Minesweeper.is_bomb(pos):
+		return
 	elif dirtTileMap.get_cellv(pos) != 0:
 		return
 	

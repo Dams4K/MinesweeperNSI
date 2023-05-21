@@ -132,7 +132,7 @@ margin_top = 316.0
 margin_right = 488.0
 margin_bottom = 345.0
 action = "discover_tile"
-action_name = "Creser"
+action_name = "Creuser"
 
 [node name="AFlagR" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer" instance=ExtResource( 3 )]
 anchor_right = 0.0
