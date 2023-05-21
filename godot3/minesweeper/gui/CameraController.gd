@@ -14,6 +14,7 @@ var min_zoom = 0.125
 var shaking = false
 
 onready var shaking_timer = $ShakingTimer
+onready var grass_tile_map = $GrassTileMap
 
 func _ready():
 	camera2D = get_node_or_null(camera_path)
@@ -26,6 +27,8 @@ func _ready():
 	var height_zoom = (Minesweeper.size.y + 2) * cell_size / viewport_rect.size.y
 	camera2D.zoom = Vector2.ONE * max(width_zoom, height_zoom)
 	max_zoom = max(width_zoom, height_zoom) * 2
+	
+	update_tilemap()
 
 func _process(delta):
 	if shaking:
@@ -47,9 +50,11 @@ func _input(event):
 	
 	if Input.is_action_pressed("move_camera") and event is InputEventMouseMotion:
 		camera2D.position += event.relative * -1 * camera2D.zoom
-	
+		
 	if Input.is_action_pressed("center_camera"):
 		center_camera()
+	
+	update_tilemap()
 
 func set_camera_zoom(new_zoom):
 	var value = clamp(camera2D.zoom.x / new_zoom, min_zoom, max_zoom)
@@ -59,11 +64,35 @@ func set_camera_zoom(new_zoom):
 	return false
 
 func center_camera():
-	camera2D.position = Minesweeper.size * cell_size / 2
+	camera2D.position = get_center_position()
+
+func get_center_position():
+	return Minesweeper.size * cell_size / 2
+
 
 func shake():
 	shaking = true
 	shaking_timer.start()
+
+func update_tilemap():
+	var pos = camera2D.position - get_viewport_rect().size * camera2D.zoom / 2
+	var size = get_viewport_rect().size * camera2D.zoom
+	pos -= grass_tile_map.cell_size
+	size += grass_tile_map.cell_size * 2
+	
+	var start_y = max(pos.y, -12 * grass_tile_map.cell_size.y)
+	var end_y = min(pos.y + size.y, (12 + Minesweeper.size.y) * grass_tile_map.cell_size.y)
+	var start_x = max(pos.x, -12 * grass_tile_map.cell_size.x)
+	var end_x = min(pos.x + size.x, (12 + Minesweeper.size.x) * grass_tile_map.cell_size.x)
+	for y in range(start_y, end_y, grass_tile_map.cell_size.y):
+		for x in range(start_x, end_x, grass_tile_map.cell_size.x):
+			var tile_pos = Vector2(int(x / grass_tile_map.cell_size.x), int(y / grass_tile_map.cell_size.y))
+			if grass_tile_map.get_cellv(tile_pos) == -1:
+				grass_tile_map.set_grassv(tile_pos)
+
+func _draw():
+	var pos = camera2D.position - get_viewport_rect().size * camera2D.zoom / 2
+	var size = get_viewport_rect().size * camera2D.zoom 
 
 func _on_ShakingTimer_timeout():
 	shaking = false

@@ -1,6 +1,7 @@
 extends TileMap
 
 export var noise: OpenSimplexNoise
+export var full_grass_value: float = 0.0
 
 func _ready():
 	clear()
@@ -11,7 +12,7 @@ func set_grass(x: int, y: int):
 	return set_grassv(Vector2(x, y))
 
 func set_grassv(position, it: int = 0):
-	if noise.get_noise_2dv(position * cell_size) < 0:
+	if noise.get_noise_2dv(position * cell_size) < full_grass_value:
 		set_cellv(position, 0, bool(randi() % 2), bool(randi() % 2), false, random_tile(0))
 	else:
 		set_cellv(position, 0)

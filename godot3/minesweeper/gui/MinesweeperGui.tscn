@@ -9,8 +9,9 @@
 [ext_resource path="res://assets/textures/selector.svg" type="Texture" id=8]
 
 [sub_resource type="OpenSimplexNoise" id=2]
-octaves = 1
-period = 200.0
+octaves = 2
+period = 256.0
+lacunarity = 4.0
 
 [sub_resource type="TileSet" id=6]
 0/name = "tilemap_greenland.svg 0"
@@ -136,6 +137,7 @@ cell_size = Vector2( 128, 128 )
 format = 1
 
 [node name="TransitionTileMap" type="TileMap" parent="."]
+modulate = Color( 0.827451, 0.827451, 0.827451, 1 )
 z_index = -1
 tile_set = SubResource( 4 )
 cell_size = Vector2( 128, 128 )
