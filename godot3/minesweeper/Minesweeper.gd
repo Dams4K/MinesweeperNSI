@@ -19,7 +19,8 @@ enum TILES_TYPE {
 }
 
 func _ready():
-	randomize()
+#	randomize()
+	pass
 
 func generate(safe_tiles: Array = []):
 	generate_map()

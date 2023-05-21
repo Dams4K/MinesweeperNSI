@@ -37,10 +37,10 @@ var color_codes = [
 ]
 
 var strings_to_draw = {}
+var gameover = false
 
 func set_generate(v):
 	generate()
-
 
 func _ready():
 	font = DynamicFont.new()
@@ -71,7 +71,7 @@ func generate():
 
 
 func _process(delta):
-	if not Engine.editor_hint:
+	if not Engine.editor_hint and not gameover:
 		var mouse_pos: Vector2 = get_global_mouse_position()
 		var tile_pos: Vector2 = selectorTileMap.world_to_map(mouse_pos)
 		selectorTileMap.clear()
@@ -109,7 +109,6 @@ func _process(delta):
 		clean_discover(tile_pos)
 		if clean_tiles_to_discover == []:
 			update() # redraw
-			dirtTileMap.update_bitmask_region(Vector2.ZERO, Minesweeper.size - Vector2.ONE)
 
 func _draw():
 	for number in strings_to_draw:
@@ -167,6 +166,7 @@ func discover(pos):
 		return
 	
 	if Minesweeper.is_bomb(pos):
+		gameover = true
 		emit_signal("lose")
 		for bomb_pos in Minesweeper.get_bombs():
 			dirtTileMap.set_cellv(bomb_pos, 0)
@@ -189,4 +189,5 @@ func discover(pos):
 		clean_tiles_to_discover.append(pos)
 		
 		if len(dirtTileMap.get_used_cells_by_id(0)) == Minesweeper.number_of_tiles() - Minesweeper.total_bombs:
+			gameover = true
 			emit_signal("won")
