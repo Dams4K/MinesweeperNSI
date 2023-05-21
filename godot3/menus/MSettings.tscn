@@ -19,23 +19,24 @@ script = ExtResource( 5 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_left = 774.0
-margin_top = 428.0
+margin_top = 395.0
 margin_right = 1274.0
-margin_bottom = 772.0
+margin_bottom = 804.0
 custom_constants/separation = 15
 
 [node name="Panel" type="Panel" parent="VBoxContainer"]
 margin_right = 500.0
-margin_bottom = 300.0
-rect_min_size = Vector2( 500, 300 )
+margin_bottom = 365.0
+rect_min_size = Vector2( 500, 365 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Panel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+scroll_horizontal_enabled = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Panel/ScrollContainer"]
 margin_right = 488.0
-margin_bottom = 312.0
+margin_bottom = 411.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -124,10 +125,37 @@ text = "Actions"
 align = 1
 valign = 1
 
+[node name="ADiggingR" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 316.0
+margin_right = 488.0
+margin_bottom = 345.0
+action = "discover_tile"
+action_name = "Creser"
+
+[node name="AFlagR" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 349.0
+margin_right = 488.0
+margin_bottom = 378.0
+action = "flag_tile"
+action_name = "Drapeau"
+
+[node name="AAutoR" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 382.0
+margin_right = 488.0
+margin_bottom = 411.0
+action = "auto_discover"
+action_name = "Auto"
+
 [node name="BackButton" type="Button" parent="VBoxContainer"]
-margin_top = 315.0
+margin_top = 380.0
 margin_right = 500.0
-margin_bottom = 344.0
+margin_bottom = 409.0
 text = "Retour"
 
 [node name="GrassTileMap" parent="." instance=ExtResource( 6 )]
