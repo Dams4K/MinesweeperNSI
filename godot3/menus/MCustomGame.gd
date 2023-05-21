@@ -1,14 +1,12 @@
 extends CenterContainer
 
 const GAME = "res://minesweeper/gui/Game.tscn"
+const M_SELECT_GAME = "res://menus/MSelectGame.tscn"
 
-onready var mines_slider = $Panel/VBoxContainer/Percentage/MinesSlider
-onready var mines_percentage = $Panel/VBoxContainer/Percentage/MinesPercentage
-
-onready var validate_button = $Panel/VBoxContainer/ValidateButton
-onready var width_spin_box = $Panel/VBoxContainer/WidthContainer/WidthSpinBox
-
-onready var height_spin_box = $Panel/VBoxContainer/HeightContainer/HeightSpinBox
+onready var width_spin_box = $"%WidthSpinBox"
+onready var height_spin_box = $"%HeightSpinBox"
+onready var mines_slider = $"%MinesSlider"
+onready var mines_percentage = $"%MinesPercentage"
 
 onready var grass_tile_map = $GrassTileMap
 
@@ -31,3 +29,7 @@ func _on_Control_resized():
 		for x in range(int(get_viewport_rect().size.x / grass_tile_map.cell_size.x) + 1):
 			if grass_tile_map.get_cell(x, y) == -1:
 				grass_tile_map.set_grass(x, y)
+
+
+func _on_BackButton_pressed():
+	get_tree().change_scene(M_SELECT_GAME)

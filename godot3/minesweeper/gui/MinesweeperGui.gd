@@ -134,10 +134,11 @@ func discover(pos):
 	
 	if dirtTileMap.get_cellv(pos) != 0:
 		dirtTileMap.set_cellv(pos, 0, false, false, false, Vector2.ONE)
-		var particle = DIGGING_PARTICLES.instance()
-		particles.add_child(particle)
-		particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
-		particle.restart()
+		if Config.get_value("Particles", "digging", true):
+			var particle = DIGGING_PARTICLES.instance()
+			particles.add_child(particle)
+			particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
+			particle.restart()
 	
 	if Minesweeper.is_bomb(pos):
 		emit_signal("lose")
@@ -145,10 +146,12 @@ func discover(pos):
 			dirtTileMap.set_cellv(bomb_pos, 0)
 			flagsTileMap.set_cellv(bomb_pos, -1)
 			bombsTileMap.set_cellv(bomb_pos, 0)
-		var particle = EXPLISION_PARTICLES.instance()
-		particles.add_child(particle)
-		particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
-		particle.restart()
+		
+		if Config.get_value("Particles", "explosion", true):
+			var particle = EXPLISION_PARTICLES.instance()
+			particles.add_child(particle)
+			particle.position = dirtTileMap.map_to_world(pos) + Vector2.ONE * dirtTileMap.cell_size / 2
+			particle.restart()
 	else:
 		var neighbors = Minesweeper.get_neighbors(pos)
 		var neighbors_bombs = Minesweeper.get_bombs_from(neighbors)

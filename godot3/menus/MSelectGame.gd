@@ -2,6 +2,7 @@ extends Control
 
 const GAME = "res://minesweeper/gui/Game.tscn"
 const M_CUSTOM_GAME = "res://menus/MCustomGame.tscn"
+const M_SETTINGS = "res://menus/MSettings.tscn"
 
 export var default_minesweeper_size = Vector2.ONE * 9
 export var default_minesweeper_percentage = 0.15
@@ -37,3 +38,7 @@ func _on_Control_resized():
 		for x in range(int(get_viewport_rect().size.x / grass_tile_map.cell_size.x) + 1):
 			if grass_tile_map.get_cell(x, y) == -1:
 				grass_tile_map.set_grass(x, y)
+
+
+func _on_SettingsButton_pressed():
+	get_tree().change_scene(M_SETTINGS)

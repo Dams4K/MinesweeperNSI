@@ -1,0 +1,124 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/themes/default_theme.tres" type="Theme" id=1]
+[ext_resource path="res://assets/fonts/dynamic/h2_font.tres" type="DynamicFont" id=2]
+[ext_resource path="res://menus/MRebinding.tscn" type="PackedScene" id=3]
+[ext_resource path="res://menus/MSwitchButton.tscn" type="PackedScene" id=4]
+[ext_resource path="res://menus/MSettings.gd" type="Script" id=5]
+[ext_resource path="res://minesweeper/gui/GrassTileMap.tscn" type="PackedScene" id=6]
+
+[sub_resource type="OpenSimplexNoise" id=2]
+octaves = 1
+period = 200.0
+
+[node name="MSettings" type="CenterContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 5 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_left = 774.0
+margin_top = 428.0
+margin_right = 1274.0
+margin_bottom = 772.0
+custom_constants/separation = 15
+
+[node name="Panel" type="Panel" parent="VBoxContainer"]
+margin_right = 500.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 500, 300 )
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Panel/ScrollContainer"]
+margin_right = 500.0
+margin_bottom = 300.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SettingsLabel" type="Label" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
+margin_right = 500.0
+margin_bottom = 57.0
+custom_fonts/font = ExtResource( 2 )
+text = "Paramètres"
+align = 1
+valign = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
+margin_top = 61.0
+margin_right = 500.0
+margin_bottom = 65.0
+
+[node name="ParticlesLabel" type="Label" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
+margin_top = 69.0
+margin_right = 500.0
+margin_bottom = 98.0
+text = "Particules"
+align = 1
+valign = 1
+
+[node name="MSwitchButton" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 102.0
+margin_right = 500.0
+margin_bottom = 131.0
+text = "Explosion"
+config_section = "Particles"
+config_key = "explosion"
+
+[node name="MSwitchButton2" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer" instance=ExtResource( 4 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 135.0
+margin_right = 500.0
+margin_bottom = 164.0
+text = "Creusage"
+config_section = "Particles"
+config_key = "digging"
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
+margin_top = 168.0
+margin_right = 500.0
+margin_bottom = 172.0
+
+[node name="CameraLabel" type="Label" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
+margin_top = 176.0
+margin_right = 500.0
+margin_bottom = 205.0
+text = "Camera"
+align = 1
+valign = 1
+
+[node name="MRebinding" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 209.0
+margin_right = 500.0
+margin_bottom = 238.0
+action = "center_camera"
+action_name = "Centrer"
+
+[node name="MRebinding2" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 242.0
+margin_right = 500.0
+margin_bottom = 271.0
+action = "move_camera"
+action_name = "Déplacer"
+
+[node name="BackButton" type="Button" parent="VBoxContainer"]
+margin_top = 315.0
+margin_right = 500.0
+margin_bottom = 344.0
+text = "Retour"
+
+[node name="GrassTileMap" parent="." instance=ExtResource( 6 )]
+noise = SubResource( 2 )
+
+[connection signal="resized" from="." to="." method="_on_MSettings_resized"]
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_BackButton_pressed"]
