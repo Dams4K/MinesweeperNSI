@@ -108,7 +108,7 @@ margin_right = 500.0
 margin_bottom = 374.0
 custom_colors/font_color = Color( 1, 1, 1, 0.588235 )
 custom_fonts/font = SubResource( 3 )
-text = "v0.9.6"
+text = "v1.0.0"
 
 [connection signal="resized" from="." to="." method="_on_Control_resized"]
 [connection signal="pressed" from="VBoxContainer/PlayPanel/VBoxContainer/GridContainer/button9x9" to="." method="_on_button9x9_pressed"]

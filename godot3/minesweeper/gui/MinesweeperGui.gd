@@ -10,7 +10,7 @@ const EXPLISION_PARTICLES := preload("res://minesweeper/gui/particles/ExplosionP
 signal won
 signal lose
 
-export var generate: bool = false setget set_generate
+export var generate: bool = false
 
 onready var grassTileMap: TileMap = $GrassTileMap
 onready var dirtTileMap: TileMap = $DirtTileMap
@@ -39,8 +39,9 @@ var color_codes = [
 var strings_to_draw = {}
 var gameover = false
 
-func set_generate(v):
-	generate()
+var count_time := false
+var start_time: int = 0
+var time: int = 0
 
 func _ready():
 	font = DynamicFont.new()
@@ -53,7 +54,6 @@ func clear_tilemaps():
 	if bombsTileMap: bombsTileMap.clear()
 	if flagsTileMap: flagsTileMap.clear()
 	if transitionTileMap: transitionTileMap.clear()
-
 
 func generate():
 	clear_tilemaps()
@@ -72,6 +72,9 @@ func generate():
 
 func _process(delta):
 	if not Engine.editor_hint and not gameover:
+		if count_time:
+			time = OS.get_ticks_msec() - start_time
+		
 		var mouse_pos: Vector2 = get_global_mouse_position()
 		var tile_pos: Vector2 = selectorTileMap.world_to_map(mouse_pos)
 		selectorTileMap.clear()
@@ -84,6 +87,8 @@ func _process(delta):
 				if Minesweeper.map.empty():
 					var neighbors = Minesweeper.get_neighbors(tile_pos)
 					Minesweeper.generate(neighbors)
+					start_time = OS.get_ticks_msec()
+					count_time = true
 				
 				tiles_to_discover.append(tile_pos)
 			if Input.is_action_just_pressed("auto_discover") and not Minesweeper.map.empty():
