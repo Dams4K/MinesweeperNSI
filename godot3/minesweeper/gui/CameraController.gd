@@ -19,10 +19,9 @@ func _ready():
 	camera2D = get_node_or_null(camera_path)
 	camera2D.current = true
 	
-	camera2D.position = Minesweeper.size * cell_size / 2
+	center_camera()
 	
 	var viewport_rect = get_viewport_rect()
-	
 	var width_zoom = (Minesweeper.size.x + 2) * cell_size / viewport_rect.size.x
 	var height_zoom = (Minesweeper.size.y + 2) * cell_size / viewport_rect.size.y
 	camera2D.zoom = Vector2.ONE * max(width_zoom, height_zoom)
@@ -48,6 +47,9 @@ func _input(event):
 	
 	if Input.is_action_pressed("move_camera") and event is InputEventMouseMotion:
 		camera2D.position += event.relative * -1 * camera2D.zoom
+	
+	if Input.is_action_pressed("center_camera"):
+		center_camera()
 
 func set_camera_zoom(new_zoom):
 	var value = clamp(camera2D.zoom.x / new_zoom, min_zoom, max_zoom)
@@ -55,6 +57,9 @@ func set_camera_zoom(new_zoom):
 		camera2D.zoom = Vector2.ONE * value
 		return true
 	return false
+
+func center_camera():
+	camera2D.position = Minesweeper.size * cell_size / 2
 
 func shake():
 	shaking = true

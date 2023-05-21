@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://minesweeper/gui/MinesweeperGui.gd" type="Script" id=1]
 [ext_resource path="res://minesweeper/gui/GrassTileMap.tscn" type="PackedScene" id=2]
@@ -7,6 +7,10 @@
 [ext_resource path="res://assets/textures/bomb.svg" type="Texture" id=5]
 [ext_resource path="res://assets/textures/flag.svg" type="Texture" id=7]
 [ext_resource path="res://assets/textures/selector.svg" type="Texture" id=8]
+
+[sub_resource type="OpenSimplexNoise" id=2]
+octaves = 1
+period = 200.0
 
 [sub_resource type="TileSet" id=6]
 0/name = "tilemap_greenland.svg 0"
@@ -33,7 +37,7 @@
 0/shapes = [  ]
 0/z_index = 0
 
-[sub_resource type="TileSet" id=2]
+[sub_resource type="TileSet" id=7]
 0/name = "bomb.svg 0"
 0/texture = ExtResource( 5 )
 0/tex_offset = Vector2( 0, 0 )
@@ -117,6 +121,7 @@
 script = ExtResource( 1 )
 
 [node name="GrassTileMap" parent="." instance=ExtResource( 2 )]
+noise = SubResource( 2 )
 
 [node name="DirtTileMap" type="TileMap" parent="."]
 z_index = -2
@@ -126,7 +131,7 @@ format = 1
 
 [node name="BombsTileMap" type="TileMap" parent="."]
 z_index = -2
-tile_set = SubResource( 2 )
+tile_set = SubResource( 7 )
 cell_size = Vector2( 128, 128 )
 format = 1
 

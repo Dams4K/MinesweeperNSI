@@ -1,11 +1,15 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://menus/MSelectGame.gd" type="Script" id=1]
 [ext_resource path="res://assets/themes/default_theme.tres" type="Theme" id=2]
 [ext_resource path="res://assets/fonts/dynamic/h1_font.tres" type="DynamicFont" id=3]
 [ext_resource path="res://minesweeper/gui/GrassTileMap.tscn" type="PackedScene" id=4]
 
-[node name="Control" type="CenterContainer"]
+[sub_resource type="OpenSimplexNoise" id=2]
+octaves = 1
+period = 200.0
+
+[node name="MSelectGame" type="CenterContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 250, 150 )
@@ -81,6 +85,8 @@ size_flags_vertical = 3
 text = "Custom"
 
 [node name="GrassTileMap" parent="." instance=ExtResource( 4 )]
+tile_data = PoolIntArray(  )
+noise = SubResource( 2 )
 
 [connection signal="resized" from="." to="." method="_on_Control_resized"]
 [connection signal="pressed" from="Panel/VBoxContainer/GridContainer/button9x9" to="." method="_on_button9x9_pressed"]
