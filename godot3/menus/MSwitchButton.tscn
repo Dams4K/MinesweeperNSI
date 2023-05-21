@@ -15,7 +15,7 @@ margin_top = 585.0
 margin_right = 120.0
 margin_bottom = 614.0
 rect_min_size = Vector2( 120, 0 )
-text = "Explosion"
+text = "Name"
 valign = 1
 
 [node name="Button" type="Button" parent="."]

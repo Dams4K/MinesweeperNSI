@@ -13,7 +13,6 @@ margin_top = 593.0
 margin_right = 120.0
 margin_bottom = 607.0
 rect_min_size = Vector2( 120, 0 )
-text = "Action"
 
 [node name="Button" type="Button" parent="."]
 unique_name_in_owner = true
@@ -23,3 +22,5 @@ margin_bottom = 1200.0
 rect_min_size = Vector2( 150, 0 )
 size_flags_horizontal = 11
 text = "X"
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
