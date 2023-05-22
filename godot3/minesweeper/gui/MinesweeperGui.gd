@@ -162,7 +162,7 @@ func clean_discover(pos):
 		else:
 			will_be_discovered.append(neighbor)
 
-	if neighbors_flagged == neighbors_bombs_number:
+	if neighbors_flagged >= neighbors_bombs_number:
 		for neighbor in will_be_discovered:
 			var tile = dirtTileMap.get_cellv(neighbor)
 			if tile != 0 and not neighbor in dirtTileMap.get_used_cells_by_id(0) and not neighbor in tiles_to_discover:
