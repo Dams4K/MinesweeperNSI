@@ -2,8 +2,8 @@ tool
 extends HBoxContainer
 
 const MOUSE_NAMES = {
-	BUTTON_LEFT: "Clique droit",
-	BUTTON_RIGHT: "Clique gauche",
+	BUTTON_LEFT: "Clique gauche",
+	BUTTON_RIGHT: "Clique droit",
 	BUTTON_MIDDLE: "Clique molette",
 }
 
